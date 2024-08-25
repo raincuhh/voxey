@@ -1,0 +1,34 @@
+#include "time.h"
+
+Time::Time(GLFWwindow* window) : mWindow(window), deltaTime(0.0)
+{
+	fixedDeltaTime = 1.0 / 60.0;
+	auto previousTime = getCurrentTime();
+}
+
+Time::~Time()
+{
+}
+
+void Time::update()
+{
+	auto currentTime = getCurrentTime();
+
+	deltaTime = currentTime - previousTime;
+	previousTime = currentTime;
+}
+
+double Time::getDeltaTime() const
+{
+	return deltaTime.count();
+}
+
+std::chrono::time_point<std::chrono::high_resolution_clock> Time::getCurrentTime()
+{
+	return std::chrono::time_point<std::chrono::high_resolution_clock>();
+}
+
+double Time::getFixedDeltaTime() const
+{
+	return fixedDeltaTime;
+}

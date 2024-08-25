@@ -14,7 +14,7 @@ include_directories(
 )
 
 set(SOURCES
-"src/main.cpp" "src/core/application.h" "src/core/application.cpp" "src/ext/glad.c")
+"src/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/inputManager.h" "src/input/inputManager.cpp")
 
 add_executable (voxey ${SOURCES} )
 
@@ -22,8 +22,26 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET voxey PROPERTY CXX_STANDARD 20)
 endif()
 
+set(GLFW_LIB_DIR "${PROJECT_SOURCE_DIR}/lib")
 
-target_link_libraries(voxey "${PROJECT_SOURCE_DIR}/lib/libglfw3.a")
+target_link_libraries(voxey
+	${OPENGL_LIBRARIES}
+	"${GLFW_LIB_DIR}/glfw3.lib"
+	opengl32
+	gdi32
+	user32
+	ws2_32
+	winmm
+)
 
-find_package(OpenGL REQUIRED)
-target_link_libraries(voxey OpenGL::GL)
+if(MINGW)
+	target_link_libraries(voxey 
+		mingw32
+		gcc
+		stdc++
+		${CMAKE_SOURCE_DIR}/C:/msys64/ucrt/lib/libmingwex.a
+)
+endif()
+
+message(STATUS "OpenGL Libraries: ${OPENGL_LIBRARIES}")
+message(STATUS "GLFW Library Directory: ${GLFW_LIB_DIR}")

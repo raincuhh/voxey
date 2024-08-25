@@ -5,6 +5,10 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
+#include "logger.h"
+#include "engine.h"
+#include "../input/inputManager.h"
+
 
 class Application
 {
@@ -18,7 +22,10 @@ public:
 private:
 	GLFWwindow* mWindow;
 
-	int createWindow();
-	static void frameBufferCallback(GLFWwindow* window, unsigned int width, unsigned int height);
+	Logger* mLogger;
+	Engine* mEngine;
+	InputManager* mInputManager;
 
+	int createWindow();
+	static void frameBufferCallback(GLFWwindow* window, int width, int height);
 };

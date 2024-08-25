@@ -1,0 +1,15 @@
+# ninja log v5
+2	630	7463176301666071	CMakeFiles/voxey.dir/voxey.cpp.obj	7c000f220349153c
+3	320	7463185763636178	CMakeFiles/voxey.dir/src/voxey.cpp.obj	231e1e2915dd185
+11	292	7463196506481559	CMakeFiles/voxey.dir/src/ext/glad.c.obj	7a2b3902f0f4e7e0
+292	443	7463196507645539	voxey.exe	9e7d45c82a51d79c
+8	50	7463196504078424	CMakeFiles/voxey.dir/src/core/application.cpp.obj	a59ffdad10c8b8c1
+4	71	7463196504278597	CMakeFiles/voxey.dir/src/main.cpp.obj	9d0e2b2f3d4afd62
+11	630	7463198336314788	CMakeFiles/voxey.dir/src/main.cpp.obj	9d0e2b2f3d4afd62
+15	637	7463198336394871	CMakeFiles/voxey.dir/src/core/application.cpp.obj	a59ffdad10c8b8c1
+638	788	7463198337575008	voxey.exe	9e7d45c82a51d79c
+10	620	7463198885126446	CMakeFiles/voxey.dir/src/main.cpp.obj	9d0e2b2f3d4afd62
+620	785	7463198886457651	voxey.exe	9e7d45c82a51d79c
+15	647	7463199976840049	CMakeFiles/voxey.dir/src/core/application.cpp.obj	a59ffdad10c8b8c1
+11	648	7463199976850062	CMakeFiles/voxey.dir/src/main.cpp.obj	9d0e2b2f3d4afd62
+648	777	7463199977858246	voxey.exe	9e7d45c82a51d79c

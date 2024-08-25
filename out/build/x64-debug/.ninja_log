@@ -7,6 +7,11 @@
 18	2981	7463273434722583	CMakeFiles/voxey.dir/src/main.cpp.obj	9d0e2b2f3d4afd62
 24	887	7463252429871981	CMakeFiles/voxey.dir/src/input/inputManager.cpp.obj	b06a49f7fb5196ce
 20	1190	7463247290893490	CMakeFiles/voxey.dir/src/core/logger.cpp.obj	d1ed2e71fdfbca26
-7	138	7463277054894032	build.ninja	d383d174ca7ec37a
+7	138	7463283371008207	build.ninja	d383d174ca7ec37a
 29	3176	7463273436674360	CMakeFiles/voxey.dir/src/core/engine.cpp.obj	ba4af6d019764c24
 37	3134	7463273436153884	CMakeFiles/voxey.dir/src/utils/time.cpp.obj	6a7f5043ebb1739a
+21	354	7463286899406735	CMakeFiles/voxey.dir/src/rendering/renderer.cpp.obj	547cfa5d76f903cf
+17	1678	7463286912635935	CMakeFiles/voxey.dir/src/core/engine.cpp.obj	ba4af6d019764c24
+8	1696	7463286912816107	CMakeFiles/voxey.dir/src/main.cpp.obj	9d0e2b2f3d4afd62
+12	1701	7463286912866137	CMakeFiles/voxey.dir/src/core/application.cpp.obj	a59ffdad10c8b8c1
+1702	1906	7463286914447574	voxey.exe	ee489d93a22f754e

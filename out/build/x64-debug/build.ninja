@@ -105,6 +105,14 @@ build CMakeFiles\voxey.dir\src\input\inputManager.cpp.obj: CXX_COMPILER__voxey_u
   TARGET_COMPILE_PDB = CMakeFiles\voxey.dir\
   TARGET_PDB = voxey.pdb
 
+build CMakeFiles\voxey.dir\src\rendering\renderer.cpp.obj: CXX_COMPILER__voxey_unscanned_Debug C$:\dev\repos\voxey\src\rendering\renderer.cpp || cmake_object_order_depends_target_voxey
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  INCLUDES = -IC:\dev\repos\voxey\include -IC:\dev\repos\voxey\include\GLFW -IC:\dev\repos\voxey\include\KHR
+  OBJECT_DIR = CMakeFiles\voxey.dir
+  OBJECT_FILE_DIR = CMakeFiles\voxey.dir\src\rendering
+  TARGET_COMPILE_PDB = CMakeFiles\voxey.dir\
+  TARGET_PDB = voxey.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target voxey
@@ -113,7 +121,7 @@ build CMakeFiles\voxey.dir\src\input\inputManager.cpp.obj: CXX_COMPILER__voxey_u
 #############################################
 # Link the executable voxey.exe
 
-build voxey.exe: CXX_EXECUTABLE_LINKER__voxey_Debug CMakeFiles\voxey.dir\src\main.cpp.obj CMakeFiles\voxey.dir\src\ext\glad.c.obj CMakeFiles\voxey.dir\src\core\application.cpp.obj CMakeFiles\voxey.dir\src\core\logger.cpp.obj CMakeFiles\voxey.dir\src\core\engine.cpp.obj CMakeFiles\voxey.dir\src\utils\time.cpp.obj CMakeFiles\voxey.dir\src\input\inputManager.cpp.obj | C$:\dev\repos\voxey\lib\glfw3.lib
+build voxey.exe: CXX_EXECUTABLE_LINKER__voxey_Debug CMakeFiles\voxey.dir\src\main.cpp.obj CMakeFiles\voxey.dir\src\ext\glad.c.obj CMakeFiles\voxey.dir\src\core\application.cpp.obj CMakeFiles\voxey.dir\src\core\logger.cpp.obj CMakeFiles\voxey.dir\src\core\engine.cpp.obj CMakeFiles\voxey.dir\src\utils\time.cpp.obj CMakeFiles\voxey.dir\src\input\inputManager.cpp.obj CMakeFiles\voxey.dir\src\rendering\renderer.cpp.obj | C$:\dev\repos\voxey\lib\glfw3.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\dev\repos\voxey\lib\glfw3.lib  opengl32.lib  gdi32.lib  user32.lib  ws2_32.lib  winmm.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

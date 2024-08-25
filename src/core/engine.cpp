@@ -20,6 +20,7 @@ int Engine::run()
     glfwSwapInterval(1);
 
     mTime = new Time(mWindow);
+    mRenderer = new Renderer(mWindow);
 
     double lag = 0.0;
     const double fixedDeltaTime = mTime->getFixedDeltaTime();
@@ -33,7 +34,10 @@ int Engine::run()
 
         while (lag >= fixedDeltaTime)
         {
+            //TODO: call this from physics->update(); 
             fixedUpdate(fixedDeltaTime);
+
+            //TODO: call this from gameLogic->update(); gamelogic ie being whatever gamelogic shit
             lag -= fixedDeltaTime;
         }
 
@@ -41,7 +45,7 @@ int Engine::run()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+        mRenderer->update(deltaTime);
 
         glfwSwapBuffers(mWindow);
         glfwPollEvents();
@@ -55,9 +59,5 @@ void Engine::update([[maybe_unused]] double deltaTime)
 }
 
 void Engine::fixedUpdate([[maybe_unused]] double fixedDeltaTime)
-{
-}
-
-void Engine::renderUpdate([[maybe_unused]] double deltaTime)
 {
 }

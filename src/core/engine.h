@@ -6,6 +6,7 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
+#include "../rendering/renderer.h"
 #include "../utils/time.h"
 
 class Engine
@@ -13,6 +14,7 @@ class Engine
 private:
 	GLFWwindow* mWindow;
 	Engine* mEngine;
+	Renderer* mRenderer;
 	Time* mTime;
 
 public:
@@ -21,5 +23,4 @@ public:
 	int run();
 	void update(double dt);
 	void fixedUpdate(double fdt);
-	void renderUpdate(double dt);
 };

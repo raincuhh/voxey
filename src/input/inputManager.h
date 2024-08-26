@@ -11,6 +11,7 @@ public:
 
 private:
 	GLFWwindow* mWindow;
+	bool wireFrameMode = false;
 
 	static void windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void handleKeyEvent(int key, int scancode, int action, int mods);

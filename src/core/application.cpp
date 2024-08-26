@@ -64,7 +64,10 @@ int Application::init()
 		std::cout << "failed to init GLFW" << std::endl;
 		return EXIT_FAILURE;
 	}
-	std::cout << "passed init GLFW" << std::endl;
+	else
+	{
+		std::cout << "passed init GLFW" << std::endl;
+	}
 	return EXIT_SUCCESS;
 }
 
@@ -97,10 +100,14 @@ int Application::createWindow()
 		std::cout << "error creating GLFW window" << std::endl;
 		return EXIT_FAILURE;
 	}
-	std::cout << "created GLFW window" << std::endl;
+	else
+	{
+		std::cout << "created GLFW window" << std::endl;
+	}
 
 	const auto screenWidth = primMonitorVideoMode->width;
 	const auto screenHeight = primMonitorVideoMode->height;
+
 	glfwSetWindowPos(mWindow, screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);
 
 	glfwMakeContextCurrent(mWindow);
@@ -113,7 +120,10 @@ int Application::createWindow()
 		std::cout << "failed to init GLAD";
 		return EXIT_FAILURE;
 	}
-	std::cout << "passed init GLAD" << std::endl;
+	else
+	{
+		std::cout << "passed init GLAD" << std::endl;
+	}
 	return EXIT_SUCCESS;
 }
 

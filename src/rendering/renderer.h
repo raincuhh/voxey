@@ -21,8 +21,9 @@ public:
 
 private:
 	GLFWwindow* mWindow;
+	unsigned int mShaderProgram;
+	unsigned int mVAO;
 
-	unsigned int vertexShader;
-
-	void setupShaders();
+	unsigned int setupShaderProgram();
+	int debugShader(unsigned int shader) const;
 };

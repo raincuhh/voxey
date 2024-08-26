@@ -80,30 +80,10 @@ unsigned int Renderer::setupShaderProgram()
 	const char* fragmentShaderSource = fragmentShaderCode.c_str();
 	unsigned int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	GLint shaderLinked = 0;
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &shaderLinked);
-	if (shaderLinked == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &maxLength);
-
-		std::vector<GLchar> infoLog(maxLength);
-		glGetProgramInfoLog(shaderProgram, maxLength, &maxLength, &infoLog[0]);
-
-		glDeleteProgram(shaderProgram);
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-		return 0;
-	}
-
-	glDetachShader(shaderProgram, vertexShader);
-	glDetachShader(shaderProgram, fragmentShader);
+	
+	unsigned int shaderProgram = glCreateProgram();
+	linkShaderProgram(shaderProgram, compiledShaderList);
+	
 	return shaderProgram;
 }
 
@@ -149,4 +129,39 @@ unsigned int Renderer::createShader(GLenum type, const GLchar* source)
 
 	compiledShaderList.push_back(shader);
 	return shader;
+}
+
+unsigned int Renderer::linkShaderProgram(unsigned int program, const std::vector<unsigned int>& shaders)
+{
+	for (unsigned int shader : shaders)
+	{
+		glAttachShader(program, shader);
+	}
+
+	glLinkProgram(program);
+	GLint shaderLinked = 0;
+	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
+
+	if (shaderLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+		glDeleteProgram(program);
+		for (unsigned int shader : shaders)
+		{
+			glDeleteShader(shader);
+		}
+		return 0;
+	}
+
+	for (unsigned int shader : shaders)
+	{
+		glDetachShader(program, shader);
+	}
+
+	return program;
 }

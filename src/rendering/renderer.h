@@ -31,4 +31,5 @@ private:
 	unsigned int setupShaderProgram();
 	int debugShader(unsigned int shader) const;
 	unsigned int createShader(GLenum type, const GLchar* shader);
+	unsigned int linkShaderProgram(unsigned int program, const std::vector<unsigned int> &shaders);
 };

@@ -17,12 +17,13 @@ public:
 	~Renderer();
 	void init();
 
-	void update(double dt);
+	void update(double dt) const;
 
 private:
 	GLFWwindow* mWindow;
 	unsigned int mShaderProgram;
 	unsigned int mVAO;
+	unsigned int mEBO;
 
 	unsigned int setupShaderProgram();
 	int debugShader(unsigned int shader) const;

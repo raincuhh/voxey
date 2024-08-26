@@ -1,9 +1,15 @@
 #include "renderer.h"
 
-float vertices[9] = {
-	-0.5f, -0.5f, 0.0f,
+float vertices[] = {
+	0.5f, 0.5f, 0.0f, // top left
 	0.5f, -0.5f, 0.0f,
-	0.0f, 0.5f, 0.0f,
+	-0.5f, -0.5f, 0.0f,
+	-0.5f, 0.5f, 0.0f, //top right
+};
+
+unsigned int indicies[] = {
+	0, 1, 3,
+	1, 2, 3,
 };
 
 Renderer::Renderer(GLFWwindow* window) : mWindow(window)
@@ -17,15 +23,24 @@ Renderer::~Renderer()
 
 void Renderer::init()
 {
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+	mEBO = EBO;
+
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
 	mVAO = VAO;
 
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
 	unsigned int shaderProgram = setupShaderProgram();
 	if (shaderProgram == 0)
@@ -42,11 +57,14 @@ void Renderer::init()
 	glEnableVertexAttribArray(0);
 }
 
-void Renderer::update(double dt)
+void Renderer::update(double dt) const
 {
 	glUseProgram(mShaderProgram);
 	glBindVertexArray(mVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glBindVertexArray(0);
 }
 
 unsigned int Renderer::setupShaderProgram()

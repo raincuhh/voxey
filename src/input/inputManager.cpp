@@ -33,7 +33,7 @@ void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
 	}
 	else if (mods && GLFW_MOD_SHIFT)
 	{
-		std::cout << "type shi" << std::endl;
+		std::cout << "shift" << std::endl;
 	}
 	else if (key == GLFW_KEY_T && action == GLFW_PRESS)
 	{

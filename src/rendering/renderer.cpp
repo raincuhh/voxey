@@ -2,7 +2,7 @@
 
 float vertices[] = {
 	0.5f, 0.5f, 0.0f, // top left
-	0.5f, -0.5f, 0.0f,
+	0.5f, -0.5f, 0.0f, //
 	-0.5f, -0.5f, 0.0f,
 	-0.5f, 0.5f, 0.0f, //top right
 };
@@ -39,6 +39,9 @@ void Renderer::init()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
@@ -52,9 +55,6 @@ void Renderer::init()
 	{
 		mShaderProgram = shaderProgram;
 	}
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
 }
 
 void Renderer::update(double dt) const
@@ -69,38 +69,16 @@ void Renderer::update(double dt) const
 
 unsigned int Renderer::setupShaderProgram()
 {
+	bool debugShaderOpening = false;
 	//vertex shader
-	std::string vertexShaderCode = FileManager::readFile("shaders/vertexShader.vert");
+	std::string vertexShaderCode = FileManager::readFile("shaders/vertexShader.vert", debugShaderOpening);
 	const char* vertexShaderSource = vertexShaderCode.c_str();
-	
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	if (debugShader(vertexShader) != EXIT_SUCCESS)
-	{
-		glDeleteShader(vertexShader);
-		return 0;
-		
-	}
+	unsigned int vertexShader = createShader(GL_VERTEX_SHADER, vertexShaderSource);
 
 	//fragment shader
-	std::string fragmentShaderCode = FileManager::readFile("shaders/fragmentShader.frag");
+	std::string fragmentShaderCode = FileManager::readFile("shaders/fragmentShader.frag", debugShaderOpening);
 	const char* fragmentShaderSource = fragmentShaderCode.c_str();
-
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	if (debugShader(fragmentShader) != EXIT_SUCCESS)
-	{
-		// delete both shaders, as in frag and vert cause we dont want memory leak.
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
-		return 0;
-	}
+	unsigned int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
@@ -146,4 +124,29 @@ int Renderer::debugShader(unsigned int shader) const
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
+}
+
+unsigned int Renderer::createShader(GLenum type, const GLchar* source)
+{
+	unsigned int shader = glCreateShader(type);
+
+	glShaderSource(shader, 1, &source, NULL);
+	glCompileShader(shader);
+
+
+	if (debugShader(shader) != EXIT_SUCCESS)
+	{
+		glDeleteShader(shader);
+
+		for (unsigned int compiledShader : compiledShaderList)
+		{
+			glDeleteShader(compiledShader);
+		}
+		compiledShaderList.clear();
+
+		return 0;
+	}
+
+	compiledShaderList.push_back(shader);
+	return shader;
 }

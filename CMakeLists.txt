@@ -14,7 +14,7 @@ include_directories(
 )
 
 set(SOURCES
-"src/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/inputManager.h" "src/input/inputManager.cpp" "src/rendering/renderer.h" "src/rendering/renderer.cpp" "src/utils/fileManager.h" "src/utils/fileManager.cpp")
+"src/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/inputManager.h" "src/input/inputManager.cpp" "src/rendering/renderer.h" "src/rendering/renderer.cpp" "src/utils/fileManager.h" "src/utils/fileManager.cpp" "src/voxel/block.h" "src/voxel/block.cpp")
 
 add_executable (voxey ${SOURCES} )
 

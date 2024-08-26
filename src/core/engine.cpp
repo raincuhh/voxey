@@ -31,11 +31,14 @@ int Engine::run()
 
         double deltaTime = mTime->getDeltaTime();
         lag += deltaTime;
+        //std::cout << deltaTime << std::endl;
+        //std::cout << "delta update, time: " << std::endl;
 
         while (lag >= fixedDeltaTime)
         {
             //TODO: call this from physics->update(); 
             fixedUpdate(fixedDeltaTime);
+            std::cout << "fixed update, time: " << lag << std::endl;
 
             //TODO: call this from gameLogic->update(); gamelogic ie being whatever gamelogic shit
             lag -= fixedDeltaTime;
@@ -43,6 +46,7 @@ int Engine::run()
 
         update(deltaTime);
 
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         mRenderer->update(deltaTime);

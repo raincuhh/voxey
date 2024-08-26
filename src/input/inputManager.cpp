@@ -2,16 +2,17 @@
 
 InputManager::InputManager(GLFWwindow* window) : mWindow(window)
 {
+	glfwSetWindowUserPointer(window, this);
 	glfwSetKeyCallback(window, windowKeyCallback);
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 }
 
 void InputManager::windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	InputManager* inputManager = static_cast<InputManager*>(glfwGetWindowUserPointer(window));
-	if (inputManager)
+	InputManager* instance = static_cast<InputManager*>(glfwGetWindowUserPointer(window));
+	if (instance)
 	{
-		inputManager->handleKeyEvent(key, scancode, action, mods);
+		instance->handleKeyEvent(key, scancode, action, mods);
 	}
 	else
 	{
@@ -23,13 +24,9 @@ void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
 {
 	(void)scancode;
 
-	if (action == GLFW_PRESS)
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
-		std::cout << "key pressed: " << key << std::endl;
-	}
-	else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-	{
-		// glfwSetWindowShouldClose(mWindow, GLFW_TRUE);
+		glfwSetWindowShouldClose(mWindow, GLFW_TRUE);
 	}
 	else if (action == GLFW_RELEASE)
 	{

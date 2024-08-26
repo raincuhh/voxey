@@ -8,6 +8,8 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
+#include "../utils/fileManager.h"
+
 class Renderer
 {
 public:
@@ -19,6 +21,8 @@ public:
 
 private:
 	GLFWwindow* mWindow;
+
+	unsigned int vertexShader;
 
 	void setupShaders();
 };

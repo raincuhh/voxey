@@ -1,6 +1,6 @@
 #include "engine.h"
 
-Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mTime(nullptr)
+Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mRenderer(nullptr), mTime(nullptr)
 {
 }
 
@@ -44,9 +44,12 @@ int Engine::run()
             lag -= fixedDeltaTime;
         }
 
-        update(deltaTime);
+        if (mWindow) 
+        {
+            update(deltaTime);
+        }
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         mRenderer->update(deltaTime);

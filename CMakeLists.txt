@@ -14,7 +14,7 @@ include_directories(
 )
 
 set(SOURCES
-"src/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/inputManager.h" "src/input/inputManager.cpp" "src/rendering/renderer.h" "src/rendering/renderer.cpp")
+"src/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/inputManager.h" "src/input/inputManager.cpp" "src/rendering/renderer.h" "src/rendering/renderer.cpp" "src/utils/fileManager.h" "src/utils/fileManager.cpp")
 
 add_executable (voxey ${SOURCES} )
 
@@ -42,6 +42,8 @@ if(MINGW)
 		${CMAKE_SOURCE_DIR}/C:/msys64/ucrt/lib/libmingwex.a
 )
 endif()
+
+set_target_properties(voxey PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 message(STATUS "OpenGL Libraries: ${OPENGL_LIBRARIES}")
 message(STATUS "GLFW Library Directory: ${GLFW_LIB_DIR}")

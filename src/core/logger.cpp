@@ -15,12 +15,18 @@ void Logger::run()
 	glfwSetErrorCallback(glfwErrorCallback); 
 }
 
+enum PrintType {
+    PRINT_NORMAL,
+    PRINT_ERROR,
+    PRINT_WARNING,
+};
+
 void Logger::glfwErrorCallback(int err, const char* desc)
 {
 	std::cerr << "GLFW error '" << err << "': " << desc << std::endl;
 }
 
-void Logger::dPrint(const char* name, char* desc, const std::vector<std::string>& args)
+void Logger::dPrint(const char* name, const char* desc, [[maybe_unused]] const std::vector<std::string>& args)
 {
     std::string formattedDesc = desc;
 

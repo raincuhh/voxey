@@ -17,7 +17,7 @@ public:
 
 	static void run();
 	static void glfwErrorCallback(int err, const char* desc);
-	void dPrint(const char* name, char* desc, const std::vector<std::string>& args);
+	static void dPrint(const char* name, const char* desc, const std::vector<std::string>& args);
 
 private:
 

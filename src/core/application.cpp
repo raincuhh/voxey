@@ -31,6 +31,18 @@ Application::~Application()
 int Application::run()
 {
 	std::cout << "running application" << std::endl;
+
+	char buffer[256];
+	if (_getcwd(buffer, sizeof(buffer)) == NULL)
+	{
+		std::cerr << "error getting current working directory" << std::endl;
+		return EXIT_FAILURE;
+	}
+	else
+	{
+		std::cout << "current working directory: " << buffer << std::endl;
+	}
+
 	if (init() != EXIT_SUCCESS)
 	{
 		return EXIT_FAILURE;

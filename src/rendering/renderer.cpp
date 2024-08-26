@@ -1,10 +1,14 @@
 #include "renderer.h"
 
-float vertices[] = {
-	0.5f, 0.5f, 0.0f, // top left
-	0.5f, -0.5f, 0.0f, //
-	-0.5f, -0.5f, 0.0f,
-	-0.5f, 0.5f, 0.0f, //top right
+struct vertex {
+	glm::vec3 position;
+};
+
+vertex vertices[] = {
+	{{0.5f, 0.5f, 0.0f}}, //top left
+	{{0.5f, -0.5f, 0.0f}}, // bottom left
+	{{-0.5f, -0.5f, 0.0f}}, // bottom right
+	{{-0.5f, 0.5f, 0.0f}}, // top right
 };
 
 unsigned int indicies[] = {
@@ -23,18 +27,14 @@ Renderer::~Renderer()
 
 void Renderer::init()
 {
-	unsigned int EBO;
-	glGenBuffers(1, &EBO);
-	mEBO = EBO;
-
 	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
 	mVAO = VAO;
 
+	glBindVertexArray(VAO);
+
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -42,27 +42,34 @@ void Renderer::init()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	unsigned int EBO;
+	glGenBuffers(1, &EBO);
+	mEBO = EBO;
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
 
-	unsigned int shaderProgram = setupShaderProgram();
-	if (shaderProgram == 0)
+	mShaderProgram = setupShaderProgram();
+	if (mShaderProgram == 0)
 	{
 		std::cerr << "error failed shader program setup";
 		return;
 	}
-	else
-	{
-		mShaderProgram = shaderProgram;
-	}
 }
 
-void Renderer::update(double dt) const
+void Renderer::renderUpdate(double dt) const
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	float timeValue = glfwGetTime();
+	float greenVal = (sin(timeValue) / 2.0f) + 0.5f;
+	int vertexColLocation = glGetUniformLocation(mShaderProgram, "testColor");
 	glUseProgram(mShaderProgram);
+	glUniform3f(vertexColLocation, 0.0f, greenVal, 0.0f);
 	glBindVertexArray(mVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
 	//glDrawArrays(GL_TRIANGLES, 0, 3);
 	//glBindVertexArray(0);
 }
@@ -70,16 +77,16 @@ void Renderer::update(double dt) const
 unsigned int Renderer::setupShaderProgram()
 {
 	bool debugShaderOpening = false;
+
 	//vertex shader
 	std::string vertexShaderCode = FileManager::readFile("shaders/vertexShader.vert", debugShaderOpening);
-	const char* vertexShaderSource = vertexShaderCode.c_str();
+	const char* vertexShaderSource = vertexShaderCode.data();
 	unsigned int vertexShader = createShader(GL_VERTEX_SHADER, vertexShaderSource);
 
 	//fragment shader
 	std::string fragmentShaderCode = FileManager::readFile("shaders/fragmentShader.frag", debugShaderOpening);
-	const char* fragmentShaderSource = fragmentShaderCode.c_str();
+	const char* fragmentShaderSource = fragmentShaderCode.data();
 	unsigned int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-
 	
 	unsigned int shaderProgram = glCreateProgram();
 	linkShaderProgram(shaderProgram, compiledShaderList);
@@ -99,8 +106,7 @@ int Renderer::debugShader(unsigned int shader) const
 		std::vector<GLchar> errorLog(maxLength);
 		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
 
-		//std::cerr << maxLength;
-		//std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << errorLog << std::endl;
+		//std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED" << errorLog << std::endl;
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

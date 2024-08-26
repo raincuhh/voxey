@@ -9,6 +9,8 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
+#include "../../include/glm/glm.hpp"
+
 #include "../utils/fileManager.h"
 
 class Renderer
@@ -17,7 +19,7 @@ public:
 	Renderer(GLFWwindow* window);
 	~Renderer();
 	void init();
-	void update(double dt) const;
+	void renderUpdate(double dt) const;
 
 private:
 	GLFWwindow* mWindow;

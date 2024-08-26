@@ -29,10 +29,9 @@ int Engine::run()
     {
         mTime->update();
 
+        //dt doesnt seem to work rn so fix this later
         double deltaTime = mTime->getDeltaTime();
         lag += deltaTime;
-        //std::cout << deltaTime << std::endl;
-        //std::cout << "delta update, time: " << std::endl;
 
         while (lag >= fixedDeltaTime)
         {
@@ -44,17 +43,10 @@ int Engine::run()
             lag -= fixedDeltaTime;
         }
 
-        if (mWindow) 
-        {
-            update(deltaTime);
-        }
-
-        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        mRenderer->update(deltaTime);
-
+        update(deltaTime);
+        mRenderer->renderUpdate(deltaTime);
         glfwSwapBuffers(mWindow);
+
         glfwPollEvents();
     }
 

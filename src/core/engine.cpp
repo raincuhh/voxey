@@ -31,6 +31,8 @@ int Engine::run()
 
         //dt doesnt seem to work rn so fix this later
         double deltaTime = mTime->getDeltaTime();
+
+        //std::cout << "delta time: " << deltaTime << std::endl;
         lag += deltaTime;
 
         while (lag >= fixedDeltaTime)

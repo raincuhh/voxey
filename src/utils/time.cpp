@@ -3,7 +3,8 @@
 Time::Time(GLFWwindow* window) : mWindow(window), deltaTime(0.0)
 {
 	fixedDeltaTime = 1.0 / 60.0;
-	auto previousTime = getCurrentTime();
+	auto previousTime = std::chrono::time_point<std::chrono::high_resolution_clock>();
+
 }
 
 Time::~Time()
@@ -12,7 +13,8 @@ Time::~Time()
 
 void Time::update()
 {
-	auto currentTime = getCurrentTime();
+	auto currentTime = std::chrono::time_point<std::chrono::high_resolution_clock>();
+
 
 	deltaTime = currentTime - previousTime;
 	previousTime = currentTime;

@@ -21,12 +21,40 @@ void Renderer::init()
 		std::cerr << "error failed shader program setup";
 		return;
 	}
+
+	glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
+
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModel = modelMatrix;
+
+	glm::mat4 viewMatrix = glm::mat4(1.0f);
+	viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
+	mView = viewMatrix;
+
+	int width, height;
+	glfwGetWindowSize(mWindow, &width, &height);
+	float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	constexpr float fov = glm::radians(90.0f);
+
+	glm::mat4 projMatrix = glm::perspective(fov, aspectRatio, 0.1f, 100.0f);
+	mProj = projMatrix;
 }
 
 void Renderer::renderUpdate(double dt) const
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
+
+	int modelLoc = glGetUniformLocation(mShaderProgram, "model");
+	glUniformMatrix4fv(mShaderProgram, 1, GL_FALSE, glm::value_ptr(mModel));
+
+	int viewLoc = glGetUniformLocation(mShaderProgram, "view");
+	glUniformMatrix4fv(mShaderProgram, 1, GL_FALSE, glm::value_ptr(mView));
+
+	int projLoc = glGetUniformLocation(mShaderProgram, "projection");
+	glUniformMatrix4fv(mShaderProgram, 1, GL_FALSE, glm::value_ptr(mProj));
+
 
 	for (Block block : blockList)
 	{
@@ -77,7 +105,6 @@ unsigned int Renderer::createShader(GLenum type, const GLchar* source)
 
 	glShaderSource(shader, 1, &source, NULL);
 	glCompileShader(shader);
-
 
 	if (debugShader(shader) != EXIT_SUCCESS)
 	{

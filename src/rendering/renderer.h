@@ -27,6 +27,10 @@ private:
 	GLFWwindow* mWindow;
 	unsigned int mShaderProgram;
 
+	glm::mat4 mModel;
+	glm::mat4 mView;
+	glm::mat4 mProj;
+
 	std::vector<unsigned int> compiledShaderList;
 	std::vector<Block> blockList;
 	//Block *block1;

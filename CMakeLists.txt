@@ -11,6 +11,7 @@ include_directories(
 	"${PROJECT_SOURCE_DIR}/include"
 	"${PROJECT_SOURCE_DIR}/include/GLFW"
 	"${PROJECT_SOURCE_DIR}/include/KHR"
+	"${PROJECT_SOURCE_DIR}/include/stb-master"
 )
 
 set(SOURCES

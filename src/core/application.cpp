@@ -127,8 +127,8 @@ int Application::createWindow()
 	else
 	{
 		std::cout << "passed init GLAD" << std::endl;
+		return EXIT_SUCCESS;
 	}
-	return EXIT_SUCCESS;
 }
 
 void Application::frameBufferCallback(GLFWwindow* window, int width, int height)

@@ -16,6 +16,12 @@ unsigned int indicies[] = {
 	1, 2, 3,
 };
 
+float texCoords[] = {
+	0.0f, 0.0f,
+	1.0f, 0.0f,
+	0.5f, 1.0f
+};
+
 Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 {
 	init();
@@ -62,10 +68,13 @@ void Renderer::renderUpdate(double dt) const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	float timeValue = glfwGetTime();
-	float greenVal = (sin(timeValue) / 2.0f) + 0.5f;
+	float redVal = (cos(timeValue) / 1.3f) + 0.5f;
+	float greenVal = (sin(timeValue) / 1.7f) + 0.5f;
+	float blueVal = (cos(timeValue) / 2.0f) + 0.5f;
+
 	int vertexColLocation = glGetUniformLocation(mShaderProgram, "testColor");
 	glUseProgram(mShaderProgram);
-	glUniform3f(vertexColLocation, 0.0f, greenVal, 0.0f);
+	glUniform3f(vertexColLocation, redVal, greenVal, blueVal);
 	glBindVertexArray(mVAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

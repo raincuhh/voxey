@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "../../include/glm/glm.hpp"
+
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
@@ -15,9 +17,19 @@ enum BlockTypes : uint8_t {
 class Block
 {
 public:
-	Block();
+	Block(BlockTypes type);
 	~Block();
-private:
-	uint8_t mBlockType = BlockTypeAir;
 
+	void setType(BlockTypes type);
+	BlockTypes getType() const;
+	void draw(unsigned int shaderProgram) const;
+private:
+	BlockTypes mBlockType;
+	GLuint mVAO;
+	GLuint mVBO;
+	GLuint mEBO;
+	glm::vec3 fragColorValue;
+
+	void setupMesh();
+	glm::vec3 inferBlockType(BlockTypes type);
 };

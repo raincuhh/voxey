@@ -8,6 +8,8 @@
 // if you get a fileManager::readFile("...") error. solution view > cmake targets view > voxey Project > 
 // right click voxey(exectuable) > add "currentDir": "${workspaceRoot}" to the end of the json.
 
+
+
 int main()
 {
 	auto application = std::make_unique<Application>();

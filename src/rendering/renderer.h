@@ -12,6 +12,7 @@
 #include "../../include/glm/glm.hpp"
 
 #include "../utils/fileManager.h"
+#include "../voxel/block.h"
 
 class Renderer
 {
@@ -26,6 +27,8 @@ private:
 	unsigned int mShaderProgram;
 
 	std::vector<unsigned int> compiledShaderList;
+	std::vector<Block> blockList;
+	Block *block1;
 
 	unsigned int mVAO;
 	unsigned int mEBO;

@@ -1,27 +1,5 @@
 #include "renderer.h"
 
-struct vertex {
-	glm::vec3 position;
-};
-
-vertex vertices[] = {
-	{{0.5f, 0.5f, 0.0f}}, //top left
-	{{0.5f, -0.5f, 0.0f}}, // bottom left
-	{{-0.5f, -0.5f, 0.0f}}, // bottom right
-	{{-0.5f, 0.5f, 0.0f}}, // top right
-};
-
-unsigned int indicies[] = {
-	0, 1, 3,
-	1, 2, 3,
-};
-
-float texCoords[] = {
-	0.0f, 0.0f,
-	1.0f, 0.0f,
-	0.5f, 1.0f
-};
-
 Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 {
 	init();
@@ -33,27 +11,8 @@ Renderer::~Renderer()
 
 void Renderer::init()
 {
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	mVAO = VAO;
 
-	glBindVertexArray(VAO);
-
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	unsigned int EBO;
-	glGenBuffers(1, &EBO);
-	mEBO = EBO;
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
+	block1 = new Block(BlockTypeDirt);
 
 	mShaderProgram = setupShaderProgram();
 	if (mShaderProgram == 0)
@@ -66,21 +25,10 @@ void Renderer::init()
 void Renderer::renderUpdate(double dt) const
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	float timeValue = glfwGetTime();
-	float redVal = (cos(timeValue) / 1.3f) + 0.5f;
-	float greenVal = (sin(timeValue) / 1.7f) + 0.5f;
-	float blueVal = (cos(timeValue) / 2.0f) + 0.5f;
-
-	int vertexColLocation = glGetUniformLocation(mShaderProgram, "testColor");
 	glUseProgram(mShaderProgram);
-	glUniform3f(vertexColLocation, redVal, greenVal, blueVal);
-	glBindVertexArray(mVAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
 
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-	//glBindVertexArray(0);
+
+	block1->draw(mShaderProgram);
 }
 
 unsigned int Renderer::setupShaderProgram()
@@ -115,7 +63,6 @@ int Renderer::debugShader(unsigned int shader) const
 		std::vector<GLchar> errorLog(maxLength);
 		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
 
-		//std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED" << errorLog << std::endl;
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

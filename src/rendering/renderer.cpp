@@ -11,8 +11,9 @@ Renderer::~Renderer()
 
 void Renderer::init()
 {
+	Block block1(BlockTypeGrass);
+	blockList.push_back(block1);
 
-	block1 = new Block(BlockTypeDirt);
 
 	mShaderProgram = setupShaderProgram();
 	if (mShaderProgram == 0)
@@ -27,8 +28,10 @@ void Renderer::renderUpdate(double dt) const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
 
-
-	block1->draw(mShaderProgram);
+	for (Block block : blockList)
+	{
+		block.draw(mShaderProgram);
+	}
 }
 
 unsigned int Renderer::setupShaderProgram()

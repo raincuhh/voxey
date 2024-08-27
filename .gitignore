@@ -1,6 +1,7 @@
 # Build directories
 /build/
 /out/
+out/build/x64-debug/
 /bin/
 /out/
 

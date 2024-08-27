@@ -5,6 +5,7 @@
 #include <string>
 #include <direct.h>
 #include <vector>
+#include <memory>
 
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
@@ -28,7 +29,7 @@ private:
 
 	std::vector<unsigned int> compiledShaderList;
 	std::vector<Block> blockList;
-	Block *block1;
+	//Block *block1;
 
 	unsigned int mVAO;
 	unsigned int mEBO;

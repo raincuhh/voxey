@@ -87,11 +87,21 @@ Block::~Block()
 {
 }
 
-void Block::setType(BlockTypes type)
+void Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 {
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+
+	glBindVertexArray(mVAO);
+	glDrawElements(GL_TRIANGLES, sizeof(cubeVertices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
-BlockTypes Block::getType() const
+void Block::setType(Block::BlockTypes type)
+{
+	mBlockType = type;
+}
+
+Block::BlockTypes Block::getType() const
 {
 	return mBlockType;
 }
@@ -100,17 +110,6 @@ glm::mat4 Block::getModelMatrix() const
 {
 	return modelMatrix;
 }
-
-void Block::draw([[maybe_unused]] unsigned int shaderProgram) const
-{
-
-	glBindTexture(GL_TEXTURE_2D, mTexture);
-
-	glBindVertexArray(mVAO);
-	glDrawElements(GL_TRIANGLES, sizeof(cubeVertices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-}
-
 
 void Block::setupMesh()
 {
@@ -121,11 +120,9 @@ void Block::setupMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 	
-	// localpos attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, position));//3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	// texture coords attribute
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, textureCoords)); //(void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
@@ -136,27 +133,11 @@ void Block::setupMesh()
 
 void Block::setupTexture()
 {
-
-	glGenTextures(1, &mTexture);
-	glBindTexture(GL_TEXTURE_2D, mTexture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	int width, height, nrChannels;
-	unsigned char* textureData = stbi_load("assets/grassBlock/grassBlockFrontFace.png", &width, &height, &nrChannels, 0);
-	
-	if (textureData)
+	int success = TextureLoader::LoadTexture("assets/testing/placeholder.png", mTexture);
+	if (success != 1)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		std::cerr << "error loading texture" << std::endl;
 	}
-	else
-	{
-		std::cout << "failed to load texture " << std::endl; //change this to texture path in the future
-	}
-
-	stbi_image_free(textureData);
 }
 
 void Block::setupModelMatrix()
@@ -169,22 +150,22 @@ glm::vec3 Block::inferBlockType(BlockTypes type)
 {
 	switch (type)
 	{
-	case BlockTypeAir:
+	case BLOCK_TYPE_AIR:
 		return glm::vec3(0.0f, 0.0f, 0.0f);
 		break;
-	case BlockTypeGrass:
+	case BLOCK_TYPE_GRASS:
 		return glm::vec3(0.0f, 2.0f, 0.0f);
 		break;
-	case BlockTypeDirt:
+	case BLOCK_TYPE_DIRT:
 		return glm::vec3(0.5f, 0.35f, 0.05f);
 		break;
-	case BlockTypeStone:
+	case BLOCK_TYPE_STONE:
 		return glm::vec3(0.7f, 0.7f, 0.7f);
 		break;
-	//case BlockTypeSand:
+	//case BLOCK_TYPE_SAND:
 	//	return glm::vec3();
 	//	break;
-	//case BlockTypeWood:
+	//case BLOCK_TYPE_WOOD:
 	//	return glm::vec3();
 	//	break;
 	default:

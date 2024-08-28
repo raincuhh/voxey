@@ -9,27 +9,28 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
-#include "../../include/stb-master/stb_image.h"
-
-enum BlockTypes : uint8_t {
-	BlockTypeAir = 0,
-	BlockTypeGrass = 1,
-	BlockTypeDirt = 2,
-	BlockTypeStone = 3,
-	BlockTypeSand = 4,
-	BlockTypeWood = 5,
-};
+#include "../utils/textureLoader.h"
 
 class Block
 {
 public:
+	enum BlockTypes : uint8_t {
+		BLOCK_TYPE_AIR = 0,
+		BLOCK_TYPE_GRASS = 1,
+		BLOCK_TYPE_DIRT = 2,
+		BLOCK_TYPE_STONE = 3,
+		BLOCK_TYPE_SAND = 4,
+		BLOCK_TYPE_WOOD = 5,
+	};
+
 	Block(BlockTypes type);
 	~Block();
+
+	void draw(unsigned int shaderProgram) const;
 
 	void setType(BlockTypes type);
 	BlockTypes getType() const;
 	glm::mat4 getModelMatrix() const;
-	void draw(unsigned int shaderProgram) const;
 private:
 	BlockTypes mBlockType;
 	GLuint mVAO;

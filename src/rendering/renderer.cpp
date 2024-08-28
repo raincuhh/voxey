@@ -7,11 +7,18 @@ Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 
 Renderer::~Renderer()
 {
+	for (unsigned int shader : compiledShaderList)
+	{
+		glDeleteShader(shader);
+	}
+
+	glDeleteBuffers(1, &mVAO);
+	glDeleteBuffers(1, &mEBO);
 }
 
-void Renderer::init()
+void Renderer::init() 
 {
-	Block block1(BlockTypeGrass);
+	Block block1(Block::BLOCK_TYPE_GRASS);
 	blockList.push_back(block1);
 
 	mShaderProgram = setupShaderProgram();
@@ -20,19 +27,22 @@ void Renderer::init()
 		std::cerr << "error failed shader program setup";
 		return;
 	}
-
-	glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-
-	glm::mat4 viewMatrix = glm::mat4(1.0f);
-	viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
-	mView = viewMatrix;
+	//glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
 
 	int width, height;
 	glfwGetWindowSize(mWindow, &width, &height);
-	float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-	constexpr float fov = glm::radians(90.0f);
 
-	glm::mat4 projMatrix = glm::perspective(fov, aspectRatio, 0.1f, 100.0f);
+	float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+
+	constexpr float fov = glm::radians(45.0f);
+
+	glm::mat4 viewMatrix = glm::mat4(1.0f);
+	glm::mat4 projMatrix = glm::mat4(1.0f);
+
+	viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
+	mView = viewMatrix;
+
+	projMatrix = glm::perspective(fov, aspectRatio, 0.1f, 100.0f);
 	mProj = projMatrix;
 }
 
@@ -42,9 +52,9 @@ void Renderer::renderUpdate(double dt) const
 	glUseProgram(mShaderProgram);
 
 	int viewLoc = glGetUniformLocation(mShaderProgram, "viewMatrix");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mView));
-
 	int projLoc = glGetUniformLocation(mShaderProgram, "projMatrix");
+
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mView));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProj));
 
 	for (Block block : blockList)
@@ -63,27 +73,21 @@ unsigned int Renderer::setupShaderProgram()
 	unsigned int vertexShader = createShader("shaders/vertexShader.vert", GL_VERTEX_SHADER, debugSOpen);
 	unsigned int fragmentShader = createShader("shaders/fragmentShader.frag", GL_FRAGMENT_SHADER, debugSOpen);
 	
-	unsigned int shaderProgram = glCreateProgram();
-	linkShaderProgram(shaderProgram, compiledShaderList);
+	//unsigned int shaderProgram = glCreateProgram();
+	unsigned int shaderProgram = linkShaderProgram(glCreateProgram(), compiledShaderList);
 	
+
 	return shaderProgram;
 }
 
-int Renderer::debugShader(unsigned int shader) const
+unsigned int Renderer::createShader(const char* path, GLenum type, bool debugShaderOpening)
 {
-	GLint compiled = 0;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-	if (compiled == GL_FALSE)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+	std::string shaderSource = FileManager::readFile(path, debugShaderOpening);
 
-		std::vector<GLchar> errorLog(maxLength);
-		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+	const char* parsedShaderSource = shaderSource.data();
+	unsigned int vertexShader = compileShader(type, parsedShaderSource);
 
-		return EXIT_FAILURE;
-	}
-	return EXIT_SUCCESS;
+	return vertexShader;
 }
 
 unsigned int Renderer::compileShader(GLenum type, const GLchar* source)
@@ -110,14 +114,21 @@ unsigned int Renderer::compileShader(GLenum type, const GLchar* source)
 	return shader;
 }
 
-unsigned int Renderer::createShader(const char* path, GLenum type, bool debugShaderOpening)
+int Renderer::debugShader(unsigned int shader) const
 {
-	std::string shaderSource = FileManager::readFile(path, debugShaderOpening);
+	GLint compiled = 0;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	if (compiled == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
 
-	const char* parsedShaderSource = shaderSource.data();
-	unsigned int vertexShader = compileShader(type, parsedShaderSource);
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
 
-	return vertexShader;
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }
 
 unsigned int Renderer::linkShaderProgram(unsigned int program, const std::vector<unsigned int>& shaders)
@@ -129,8 +140,8 @@ unsigned int Renderer::linkShaderProgram(unsigned int program, const std::vector
 
 	glLinkProgram(program);
 	GLint shaderLinked = 0;
-	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
 
+	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
 	if (shaderLinked == GL_FALSE)
 	{
 		GLint maxLength = 0;

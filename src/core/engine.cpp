@@ -15,7 +15,7 @@ Engine::~Engine()
 
 int Engine::run()
 {
-    std::cout << "running engine: " << mWindow << std::endl;
+    std::cout << "running engine" << std::endl;
 
     glfwSwapInterval(1);
     glEnable(GL_DEPTH_TEST);

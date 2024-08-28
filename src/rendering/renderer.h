@@ -27,20 +27,18 @@ private:
 	GLFWwindow* mWindow;
 	unsigned int mShaderProgram;
 
-	//glm::mat4 mModel;
 	glm::mat4 mView;
 	glm::mat4 mProj;
 
 	std::vector<unsigned int> compiledShaderList;
 	std::vector<Block> blockList;
-	//Block *block1;
 
 	unsigned int mVAO;
 	unsigned int mEBO;
 
 	unsigned int setupShaderProgram();
-	int debugShader(unsigned int shader) const;
 	unsigned int createShader(const char* path, GLenum type, bool debugShaderOpening);
 	unsigned int compileShader(GLenum type, const GLchar* shader);
+	int debugShader(unsigned int shader) const;
 	unsigned int linkShaderProgram(unsigned int program, const std::vector<unsigned int> &shaders);
 };

@@ -85,9 +85,9 @@ unsigned int Renderer::createShader(const char* path, GLenum type, bool debugSha
 	std::string shaderSource = FileManager::readFile(path, debugShaderOpening);
 
 	const char* parsedShaderSource = shaderSource.data();
-	unsigned int vertexShader = compileShader(type, parsedShaderSource);
+	unsigned int shader = compileShader(type, parsedShaderSource);
 
-	return vertexShader;
+	return shader;
 }
 
 unsigned int Renderer::compileShader(GLenum type, const GLchar* source)
@@ -139,8 +139,8 @@ unsigned int Renderer::linkShaderProgram(unsigned int program, const std::vector
 	}
 
 	glLinkProgram(program);
-	GLint shaderLinked = 0;
 
+	GLint shaderLinked = 0;
 	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
 	if (shaderLinked == GL_FALSE)
 	{

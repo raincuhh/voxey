@@ -1,0 +1,111 @@
+#include "shaderManager.h"
+
+GLuint ShaderManager::createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths)
+{
+	std::vector<GLuint> shaders;
+
+	for (std::pair<std::string, GLenum> sInfo : shaderPaths)
+	{
+		GLuint shader = createShader(sInfo.first.c_str(), sInfo.second);
+		shaders.push_back(shader);
+	}
+
+	GLuint shaderProgram = linkProgram(glCreateProgram(), std::vector<GLuint>& shaders);
+
+	programShaders[shaderProgram] = shaders;
+	return shaderProgram;
+}
+
+GLuint ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& shaders)
+{
+	return GLuint();
+}
+
+GLuint ShaderManager::getActiveProgram()
+{
+	GLint program;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+	return static_cast<GLuint>(program);
+}
+
+GLuint ShaderManager::createShader(const char* path, GLenum type)
+{
+	std::string source = FileManager::readFile(path);
+	const char* parsedSource = source.data();
+
+	GLuint shader = compileShader(parsedSource, type);
+	return shader;
+}
+
+GLuint ShaderManager::compileShader(const char* source, GLenum type)
+{
+	GLuint shader = glCreateShader(type);
+
+	glShaderSource(shader, 1, &source, NULL);
+	glCompileShader(shader);
+
+	if (debugShader(shader) != EXIT_SUCCESS)
+	{
+		deleteShadersFromActiveProgram();
+		return 0;
+	}
+
+	return shader;
+}
+
+GLint ShaderManager::debugShader(GLuint shader) const
+{
+	GLint compiled = 0;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	if (compiled == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+}
+
+GLint ShaderManager::debugProgram(GLuint program) const
+{
+	GLint shaderLinked = 0;
+
+	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
+
+	if (shaderLinked == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+		std::vector<GLchar> infoLog(maxLength);
+		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+		glDeleteProgram(program);
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+}
+
+void ShaderManager::deleteShadersFromActiveProgram()
+{
+	GLuint activeProgram = getActiveProgram();
+
+	if (programShaders.find(activeProgram) != programShaders.end())
+	{
+		for (GLuint shader : programShaders[activeProgram])
+		{
+			glDetachShader(activeProgram, shader);
+			glDeleteShader(shader);
+		}
+
+		programShaders.erase(activeProgram);
+	}
+	else
+	{
+		std::cerr << "no shaders found for the active shader program" << std::endl;
+	}
+}

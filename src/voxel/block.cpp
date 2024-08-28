@@ -79,8 +79,8 @@ Block::Block(BlockTypes type)
 	fragColorValue = inferBlockType(type);
 
 	setupMesh();
-	//currently renders some weird line strip texture
-	setupTexture();
+	setupTexture(); //currently renders some weird line strip texture
+	setupModelMatrix();
 }
 
 Block::~Block()
@@ -96,6 +96,11 @@ BlockTypes Block::getType() const
 	return mBlockType;
 }
 
+glm::mat4 Block::getModelMatrix() const
+{
+	return modelMatrix;
+}
+
 void Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 {
 
@@ -107,12 +112,10 @@ void Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 }
 
 
-
 void Block::setupMesh()
 {
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
-
 
 	glGenBuffers(1, &mVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
@@ -133,6 +136,7 @@ void Block::setupMesh()
 
 void Block::setupTexture()
 {
+
 	glGenTextures(1, &mTexture);
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 
@@ -153,6 +157,11 @@ void Block::setupTexture()
 	}
 
 	stbi_image_free(textureData);
+}
+
+void Block::setupModelMatrix()
+{
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 

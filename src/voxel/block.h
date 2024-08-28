@@ -28,6 +28,7 @@ public:
 
 	void setType(BlockTypes type);
 	BlockTypes getType() const;
+	glm::mat4 getModelMatrix() const;
 	void draw(unsigned int shaderProgram) const;
 private:
 	BlockTypes mBlockType;
@@ -36,10 +37,12 @@ private:
 	GLuint mEBO;
 	GLuint mTexture;
 	glm::vec3 fragColorValue;
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 	//vertex *cubeVertices;
 
 	void setupMesh();
 	void setupTexture();
+	void setupModelMatrix();
 	glm::vec3 inferBlockType(BlockTypes type);
 };

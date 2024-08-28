@@ -27,7 +27,7 @@ private:
 	GLFWwindow* mWindow;
 	unsigned int mShaderProgram;
 
-	glm::mat4 mModel;
+	//glm::mat4 mModel;
 	glm::mat4 mView;
 	glm::mat4 mProj;
 
@@ -40,6 +40,7 @@ private:
 
 	unsigned int setupShaderProgram();
 	int debugShader(unsigned int shader) const;
-	unsigned int createShader(GLenum type, const GLchar* shader);
+	unsigned int createShader(const char* path, GLenum type, bool debugShaderOpening);
+	unsigned int compileShader(GLenum type, const GLchar* shader);
 	unsigned int linkShaderProgram(unsigned int program, const std::vector<unsigned int> &shaders);
 };

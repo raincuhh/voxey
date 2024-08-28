@@ -18,11 +18,13 @@ int Engine::run()
     std::cout << "running engine: " << mWindow << std::endl;
 
     glfwSwapInterval(1);
+    glEnable(GL_DEPTH_TEST);
+
 
     mTime = new Time(mWindow);
     mRenderer = new Renderer(mWindow);
 
-    double lag = 0.0;
+    double timeAcc = 0.0;
     const double fixedDeltaTime = mTime->getFixedDeltaTime();
 
     while (!glfwWindowShouldClose(mWindow))
@@ -33,16 +35,16 @@ int Engine::run()
         double deltaTime = mTime->getDeltaTime();
 
         //std::cout << "delta time: " << deltaTime << std::endl;
-        lag += deltaTime;
+        timeAcc += deltaTime;
 
-        while (lag >= fixedDeltaTime)
+        while (timeAcc >= fixedDeltaTime)
         {
             //TODO: call this from physics->update(); 
             fixedUpdate(fixedDeltaTime);
-            std::cout << "fixed update, time: " << lag << std::endl;
+            std::cout << "fixed update, time: " << timeAcc << std::endl;
 
             //TODO: call this from gameLogic->update(); gamelogic ie being whatever gamelogic shit
-            lag -= fixedDeltaTime;
+            timeAcc -= fixedDeltaTime;
         }
 
         update(deltaTime);

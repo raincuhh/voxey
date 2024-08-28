@@ -14,7 +14,6 @@ void Renderer::init()
 	Block block1(BlockTypeGrass);
 	blockList.push_back(block1);
 
-
 	mShaderProgram = setupShaderProgram();
 	if (mShaderProgram == 0)
 	{
@@ -23,10 +22,6 @@ void Renderer::init()
 	}
 
 	glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
-
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	mModel = modelMatrix;
 
 	glm::mat4 viewMatrix = glm::mat4(1.0f);
 	viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
@@ -46,35 +41,27 @@ void Renderer::renderUpdate(double dt) const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
 
-	int modelLoc = glGetUniformLocation(mShaderProgram, "model");
-	glUniformMatrix4fv(mShaderProgram, 1, GL_FALSE, glm::value_ptr(mModel));
+	int viewLoc = glGetUniformLocation(mShaderProgram, "viewMatrix");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mView));
 
-	int viewLoc = glGetUniformLocation(mShaderProgram, "view");
-	glUniformMatrix4fv(mShaderProgram, 1, GL_FALSE, glm::value_ptr(mView));
-
-	int projLoc = glGetUniformLocation(mShaderProgram, "projection");
-	glUniformMatrix4fv(mShaderProgram, 1, GL_FALSE, glm::value_ptr(mProj));
-
+	int projLoc = glGetUniformLocation(mShaderProgram, "projMatrix");
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProj));
 
 	for (Block block : blockList)
 	{
+		glm::mat4 modelMatrix = block.getModelMatrix();
+		int modelLoc = glGetUniformLocation(mShaderProgram, "modelMatrix");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		block.draw(mShaderProgram);
 	}
 }
 
 unsigned int Renderer::setupShaderProgram()
 {
-	bool debugShaderOpening = false;
+	bool debugSOpen = false;
 
-	//vertex shader
-	std::string vertexShaderCode = FileManager::readFile("shaders/vertexShader.vert", debugShaderOpening);
-	const char* vertexShaderSource = vertexShaderCode.data();
-	unsigned int vertexShader = createShader(GL_VERTEX_SHADER, vertexShaderSource);
-
-	//fragment shader
-	std::string fragmentShaderCode = FileManager::readFile("shaders/fragmentShader.frag", debugShaderOpening);
-	const char* fragmentShaderSource = fragmentShaderCode.data();
-	unsigned int fragmentShader = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+	unsigned int vertexShader = createShader("shaders/vertexShader.vert", GL_VERTEX_SHADER, debugSOpen);
+	unsigned int fragmentShader = createShader("shaders/fragmentShader.frag", GL_FRAGMENT_SHADER, debugSOpen);
 	
 	unsigned int shaderProgram = glCreateProgram();
 	linkShaderProgram(shaderProgram, compiledShaderList);
@@ -99,7 +86,7 @@ int Renderer::debugShader(unsigned int shader) const
 	return EXIT_SUCCESS;
 }
 
-unsigned int Renderer::createShader(GLenum type, const GLchar* source)
+unsigned int Renderer::compileShader(GLenum type, const GLchar* source)
 {
 	unsigned int shader = glCreateShader(type);
 
@@ -121,6 +108,16 @@ unsigned int Renderer::createShader(GLenum type, const GLchar* source)
 
 	compiledShaderList.push_back(shader);
 	return shader;
+}
+
+unsigned int Renderer::createShader(const char* path, GLenum type, bool debugShaderOpening)
+{
+	std::string shaderSource = FileManager::readFile(path, debugShaderOpening);
+
+	const char* parsedShaderSource = shaderSource.data();
+	unsigned int vertexShader = compileShader(type, parsedShaderSource);
+
+	return vertexShader;
 }
 
 unsigned int Renderer::linkShaderProgram(unsigned int program, const std::vector<unsigned int>& shaders)

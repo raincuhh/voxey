@@ -42,6 +42,7 @@ void InputManager::windowKeyCallback(GLFWwindow* window, int key, int scancode, 
 
 void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
 {
+    // think a better way would be to just glfw get inputkey then keypressed. i guess
 	(void)scancode;
 
 	if (action == GLFW_PRESS)

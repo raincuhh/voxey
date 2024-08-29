@@ -8,6 +8,8 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
 
+vec3 testPos = vec3(0.0f, 0.0f, 1.0f);
+
 void main()
 {
 	gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(aPos, 1.0);

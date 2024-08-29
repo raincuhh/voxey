@@ -29,19 +29,16 @@ int Engine::run()
 
     while (!glfwWindowShouldClose(mWindow))
     {
-        mTime->update();
-
-        //dt doesnt seem to work rn so fix this later
+        mTime->timeUpdate();
         double deltaTime = mTime->getDeltaTime();
 
-        //std::cout << "delta time: " << deltaTime << std::endl;
         timeAcc += deltaTime;
+        std::cout << "deltaTime: " << deltaTime << std::endl;
 
         while (timeAcc >= fixedDeltaTime)
         {
             //TODO: call this from physics->update(); 
             fixedUpdate(fixedDeltaTime);
-            std::cout << "fixed update, time: " << timeAcc << std::endl;
 
             //TODO: call this from gameLogic->update(); gamelogic ie being whatever gamelogic shit
             timeAcc -= fixedDeltaTime;
@@ -49,8 +46,8 @@ int Engine::run()
 
         update(deltaTime);
         mRenderer->renderUpdate(deltaTime);
-        glfwSwapBuffers(mWindow);
 
+        glfwSwapBuffers(mWindow);
         glfwPollEvents();
     }
 

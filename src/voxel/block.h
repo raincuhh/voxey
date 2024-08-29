@@ -30,6 +30,8 @@ public:
 
 	void setType(BlockTypes type);
 	BlockTypes getType() const;
+
+	void translateModelMatrix(glm::vec3 translate);
 	glm::mat4 getModelMatrix() const;
 private:
 	BlockTypes mBlockType;
@@ -39,8 +41,6 @@ private:
 	GLuint mTexture;
 	glm::vec3 fragColorValue;
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
-
-	//vertex *cubeVertices;
 
 	void setupMesh();
 	void setupTexture();

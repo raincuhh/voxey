@@ -106,6 +106,11 @@ Block::BlockTypes Block::getType() const
 	return mBlockType;
 }
 
+void Block::translateModelMatrix(glm::vec3 translate)
+{
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(translate.x, translate.y, translate.z));
+}
+
 glm::mat4 Block::getModelMatrix() const
 {
 	return modelMatrix;
@@ -143,6 +148,7 @@ void Block::setupTexture()
 void Block::setupModelMatrix()
 {
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 5.0f));
 }
 
 

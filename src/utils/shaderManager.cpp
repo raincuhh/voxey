@@ -146,8 +146,19 @@ void ShaderManager::deleteShadersFromActiveProgram()
 
 void ShaderManager::deleteAllProgramShaders()
 {
-	if (programShaders.size() >= 1)
+	for (auto& entry : programShaders) 
 	{
-		programShaders.clear();
+		GLuint program = entry.first;      
+		std::vector<GLuint>& shaders = entry.second; 
+
+		for (GLuint shader : shaders)
+		{
+			glDetachShader(program, shader);
+			glDeleteShader(shader);  
+		}
+
+		glDeleteProgram(program);
 	}
+
+	programShaders.clear();  
 }

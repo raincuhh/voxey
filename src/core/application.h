@@ -28,4 +28,8 @@ private:
 
 	int createWindow();
 	static void frameBufferCallback(GLFWwindow* window, int width, int height);
+	void setupDefaultKeybinds();
+	void setupDebugKeybinds();
+
+	static void changeGLPolygonMode();
 };

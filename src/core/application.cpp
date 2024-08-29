@@ -53,6 +53,7 @@ int Application::run()
 		return EXIT_FAILURE;
 	}
 
+
 	mEngine = new Engine(mWindow);
 	return mEngine->run();
 }
@@ -117,7 +118,9 @@ int Application::createWindow()
 	glfwMakeContextCurrent(mWindow);
 	glfwSetFramebufferSizeCallback(mWindow, frameBufferCallback);
 
-	mInputManager = new InputManager(mWindow);
+	//mInputManager = new InputManager(mWindow);
+	mInputManager = new InputManager();
+	mInputManager->init(mWindow, mInputManager);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -129,10 +132,36 @@ int Application::createWindow()
 		std::cout << "passed init GLAD" << std::endl;
 		return EXIT_SUCCESS;
 	}
+
+	setupDefaultKeybinds();
 }
 
 void Application::frameBufferCallback(GLFWwindow* window, int width, int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
+}
+
+void Application::setupDefaultKeybinds()
+{
+	InputManager::registerKeybind(Application::changeGLPolygonMode, Key::T);
+}
+
+void Application::setupDebugKeybinds()
+{
+}
+
+void Application::changeGLPolygonMode()
+{
+	GLint currentPolygonMode;
+	glGetIntegerv(GL_FRONT_AND_BACK, &currentPolygonMode);
+
+	if (currentPolygonMode == GL_LINES)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	else if (currentPolygonMode == GL_FILL)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
+	}
 }

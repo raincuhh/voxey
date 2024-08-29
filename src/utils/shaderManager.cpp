@@ -1,5 +1,10 @@
 #include "shaderManager.h"
 
+ShaderManager::~ShaderManager()
+{
+	deleteAllProgramShaders();
+}
+
 GLuint ShaderManager::createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths)
 {
 	std::vector<GLuint> shaders;
@@ -10,7 +15,7 @@ GLuint ShaderManager::createProgram(const std::vector<std::pair<std::string, GLe
 		shaders.push_back(shader);
 	}
 
-	GLuint shaderProgram = linkProgram(glCreateProgram(), std::vector<GLuint>& shaders);
+	GLuint shaderProgram = linkProgram(glCreateProgram(), shaders);
 
 	programShaders[shaderProgram] = shaders;
 	return shaderProgram;
@@ -18,7 +23,37 @@ GLuint ShaderManager::createProgram(const std::vector<std::pair<std::string, GLe
 
 GLuint ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& shaders)
 {
-	return GLuint();
+	for (GLuint shader : shaders)
+	{
+		glAttachShader(program, shader);
+	}
+
+	glLinkProgram(program);
+
+	GLint linked = 0;
+	glGetProgramiv(program, GL_LINK_STATUS, &linked);
+	if (linked == GL_FALSE)
+	{
+		GLint logLen = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLen);
+
+		std::vector<GLchar> infoLog(logLen);
+		glGetProgramInfoLog(program, logLen, &logLen, &infoLog[0]);
+		glDeleteProgram(program);
+
+		for (unsigned int shader : shaders)
+		{
+			glDeleteShader(shader);
+		}
+		return 0;
+	}
+
+	for (GLuint shader : shaders)
+	{
+		glDetachShader(program, shader);
+	}
+
+	return program;
 }
 
 GLuint ShaderManager::getActiveProgram()
@@ -101,11 +136,18 @@ void ShaderManager::deleteShadersFromActiveProgram()
 			glDetachShader(activeProgram, shader);
 			glDeleteShader(shader);
 		}
-
 		programShaders.erase(activeProgram);
 	}
 	else
 	{
 		std::cerr << "no shaders found for the active shader program" << std::endl;
+	}
+}
+
+void ShaderManager::deleteAllProgramShaders()
+{
+	if (programShaders.size() >= 1)
+	{
+		programShaders.clear();
 	}
 }

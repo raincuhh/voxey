@@ -12,6 +12,8 @@
 class ShaderManager
 {
 public:
+	~ShaderManager();
+
 	GLuint createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths);
 	GLuint linkProgram(GLuint program, const std::vector<GLuint>& shaders);
 	GLuint getActiveProgram();
@@ -23,6 +25,7 @@ private:
 	GLint debugProgram(GLuint program) const;
 
 	void deleteShadersFromActiveProgram();
+	void deleteAllProgramShaders();
 
 
 	std::map <GLuint, std::vector<GLuint>> programShaders;

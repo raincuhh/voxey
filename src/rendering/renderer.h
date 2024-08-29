@@ -12,6 +12,7 @@
 
 #include "../../include/glm/glm.hpp"
 
+#include "../utils/shaderManager.h"
 #include "../utils/fileManager.h"
 #include "../voxel/block.h"
 
@@ -25,7 +26,9 @@ public:
 
 private:
 	GLFWwindow* mWindow;
-	unsigned int mShaderProgram;
+
+	ShaderManager* mShaderManager;
+	GLuint mShaderProgram;
 
 	glm::mat4 mView;
 	glm::mat4 mProj;
@@ -36,9 +39,5 @@ private:
 	unsigned int mVAO;
 	unsigned int mEBO;
 
-	unsigned int setupShaderProgram();
-	unsigned int createShader(const char* path, GLenum type, bool debugShaderOpening);
-	unsigned int compileShader(GLenum type, const GLchar* shader);
-	int debugShader(unsigned int shader) const;
-	unsigned int linkShaderProgram(unsigned int program, const std::vector<unsigned int> &shaders);
+	void setupShaderProgram();
 };

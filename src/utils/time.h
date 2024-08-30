@@ -9,17 +9,16 @@
 class Time
 {
 public:
-	Time(GLFWwindow* window);
+	Time();
 	~Time();
 
 	void timeUpdate();
-	double getDeltaTime() const;
-	double getFixedDeltaTime() const;
+	static double getDeltaTime();
+	static double getFixedDeltaTime();
 
 private:
-	GLFWwindow* mWindow;
-	double deltaTime;
-	double previousTime;
-	double fixedDeltaTime;
+	static double deltaTime;
+	static double previousTime;
+	static double fixedDeltaTime;
 };
 

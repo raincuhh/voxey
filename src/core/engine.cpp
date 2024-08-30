@@ -1,11 +1,23 @@
 #include "engine.h"
 
-Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mRenderer(nullptr), mTime(nullptr)
+Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mRenderer(nullptr), mTime(nullptr), mPhysics(nullptr)
 {
 }
 
 Engine::~Engine()
 {
+    if (mRenderer)
+    {
+        delete mRenderer;
+        mRenderer = nullptr;
+    }
+
+    if (mPhysics)
+    {
+        delete mPhysics;
+        mPhysics = nullptr;
+    }
+
     if (mTime)
     {
         delete mTime;
@@ -19,12 +31,14 @@ int Engine::run()
 
     glfwSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_CW);
 
-
-    mTime = new Time(mWindow);
+    mTime = new Time();
     mRenderer = new Renderer(mWindow);
+    mPhysics = new Physics();
 
-    double timeAcc = 0.0;
+    double timeAccu = 0.0;
     const double fixedDeltaTime = mTime->getFixedDeltaTime();
 
     while (!glfwWindowShouldClose(mWindow))
@@ -32,29 +46,27 @@ int Engine::run()
         mTime->timeUpdate();
         double deltaTime = mTime->getDeltaTime();
 
-        timeAcc += deltaTime;
+        timeAccu += deltaTime;
         std::cout << "deltaTime: " << deltaTime << std::endl;
 
-        while (timeAcc >= fixedDeltaTime)
+        while (timeAccu >= fixedDeltaTime)
         {
-            //TODO: call this from physics->update(); 
-            fixedUpdate(fixedDeltaTime);
+            mPhysics->physicsUpdate(fixedDeltaTime);
+            //TODO: gameLogic->update(); gamelogic ie being whatever gamelogic shit
 
-            //TODO: call this from gameLogic->update(); gamelogic ie being whatever gamelogic shit
-            timeAcc -= fixedDeltaTime;
+            timeAccu -= fixedDeltaTime;
         }
 
-        update(deltaTime);
+        engineUpdate(deltaTime);
         mRenderer->renderUpdate(deltaTime);
 
         glfwSwapBuffers(mWindow);
         glfwPollEvents();
     }
-
     return EXIT_SUCCESS;
 }
 
-void Engine::update([[maybe_unused]] double deltaTime)
+void Engine::engineUpdate([[maybe_unused]] double deltaTime)
 {
 }
 

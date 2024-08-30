@@ -47,7 +47,8 @@ void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
 
 	if (action == GLFW_PRESS)
 	{
-		Key mappedKey;
+		Key mappedKey = static_cast<Key>(key);
+        /*
         switch (key)
         {
         case GLFW_KEY_ESCAPE: mappedKey = Key::ESCAPE; break;
@@ -152,7 +153,7 @@ void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
         case GLFW_KEY_NUM_LOCK: mappedKey = Key::NUM_LOCK; break;
         default: return;
         }
-
+        */
 		keyPressed(mappedKey);
 	}
 }

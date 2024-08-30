@@ -7,7 +7,6 @@ struct vertex {
 };
 
 const vertex cubeVertices[] = {
-
 	// front
 	{{ 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f }}, // top right
 	{{ 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f }}, // bottom right
@@ -48,29 +47,28 @@ const vertex cubeVertices[] = {
 
 const unsigned int indices[] = {
 	// front
-	0, 1, 3, // triangle1 
-	1, 2, 3, // triangle2 
+	0, 3, 1, // triangle1 
+	1, 3, 2, // triangle2 
 
 	// back
-	4, 7, 5, // triangle1 
-	5, 7, 6, // triangle2 
+	4, 5, 7, // triangle1 
+	5, 6, 7, // triangle2 
 
 	// left
-	8, 11, 9, // triangle1 
-	9, 11, 10, // triangle2 
+	8, 9, 11, // triangle1 
+	9, 10, 11, // triangle2 
 
 	// right
-	12, 13, 15, // triangle1 
-	13, 14, 15, // triangle2 
+	12, 15, 13, // triangle1 
+	13, 15, 14, // triangle2 
 
 	// top
-	16, 17, 19, // triangle1 
-	17, 18, 19, // triangle2 
+	16, 19, 17, // triangle1 
+	17, 19, 18, // triangle2 
 
 	// bottom
-	20, 23, 21, // triangle1
-	21, 23, 22, // triangle2
-	
+	20, 21, 23, // triangle1
+	21, 22, 23, // triangle2
 };
 
 Block::Block(BlockTypes type)

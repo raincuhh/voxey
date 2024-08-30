@@ -7,6 +7,7 @@
 #include "../../include/GLFW/glfw3.h"
 
 #include "../rendering/renderer.h"
+#include "../physics/physics.h"
 #include "../utils/time.h"
 
 class Engine
@@ -16,11 +17,12 @@ private:
 	Engine* mEngine;
 	Renderer* mRenderer;
 	Time* mTime;
+	Physics* mPhysics;
 
 public:
 	Engine(GLFWwindow* window);
 	~Engine();
 	int run();
-	void update(double dt);
-	void fixedUpdate(double fdt);
+	void engineUpdate(double deltaTime);
+	void fixedUpdate(double fixedDeltaTime);
 };

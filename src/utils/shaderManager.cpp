@@ -71,11 +71,10 @@ GLuint ShaderManager::createShader(const char* path, GLenum type)
 	GLuint shader = compileShader(parsedSource, type);
 	return shader;
 }
-
+ 
 GLuint ShaderManager::compileShader(const char* source, GLenum type)
 {
 	GLuint shader = glCreateShader(type);
-
 	glShaderSource(shader, 1, &source, NULL);
 	glCompileShader(shader);
 
@@ -92,6 +91,7 @@ GLint ShaderManager::debugShader(GLuint shader) const
 {
 	GLint compiled = 0;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+
 	if (compiled == GL_FALSE)
 	{
 		GLint maxLength = 0;
@@ -108,18 +108,17 @@ GLint ShaderManager::debugShader(GLuint shader) const
 GLint ShaderManager::debugProgram(GLuint program) const
 {
 	GLint shaderLinked = 0;
-
 	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
 
 	if (shaderLinked == GL_FALSE)
 	{
 		GLint maxLength = 0;
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-
 		std::vector<GLchar> infoLog(maxLength);
-		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 
+		glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 		glDeleteProgram(program);
+
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

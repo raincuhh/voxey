@@ -7,11 +7,15 @@
 
 //#include "../core/logger.h"
 
-class FileManager
+namespace Utils 
 {
-public:
-	static std::string readFile(const char* filePath, bool debug = false);
+	class FileManager
+	{
+	public:
+		static std::string readFile(const char* filePath, bool debug = false);
 
-private:
+	private:
 
-};
+	};
+}
+

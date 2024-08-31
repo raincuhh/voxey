@@ -18,5 +18,5 @@ public:
 
 private:
 	int chunkSize = 16;
-	std::vector<Block> blocks;
+	std::vector<Rendering::Block> blocks;
 };

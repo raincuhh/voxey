@@ -8,9 +8,12 @@
 
 #include "../../include/stb-master/stb_image.h"
 
-
-class TextureLoader
+namespace Utils
 {
-public:
-	static int LoadTexture(const std::string& filePath, unsigned int& texture);
-};
+	class TextureLoader
+	{
+	public:
+		static int LoadTexture(const std::string& filePath, unsigned int& texture);
+	};
+}
+

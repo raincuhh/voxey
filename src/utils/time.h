@@ -6,19 +6,24 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
-class Time
+namespace Utils
 {
-public:
-	Time();
-	~Time();
+	class Time
+	{
+	public:
+		Time();
+		~Time();
 
-	void timeUpdate();
-	static double getDeltaTime();
-	static double getFixedDeltaTime();
+		void timeUpdate();
+		static double getDeltaTime();
+		static double getFixedDeltaTime();
 
-private:
-	static double deltaTime;
-	static double previousTime;
-	static double fixedDeltaTime;
-};
+	private:
+		static double deltaTime;
+		static double previousTime;
+		static double fixedDeltaTime;
+	};
+}
+
+
 

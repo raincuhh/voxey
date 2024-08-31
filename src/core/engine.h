@@ -10,19 +10,22 @@
 #include "../physics/physics.h"
 #include "../utils/time.h"
 
-class Engine
+namespace Engine 
 {
-private:
-	GLFWwindow* mWindow;
-	Engine* mEngine;
-	Renderer* mRenderer;
-	Time* mTime;
-	Physics* mPhysics;
+	class Engine
+	{
+	private:
+		GLFWwindow* mWindow;
+		Engine* mEngine;
+		Rendering::Renderer* mRenderer;
+		Utils::Time* mTime;
+		Physics* mPhysics;
 
-public:
-	Engine(GLFWwindow* window);
-	~Engine();
-	int run();
-	void engineUpdate(double deltaTime);
-	void fixedUpdate(double fixedDeltaTime);
-};
+	public:
+		Engine(GLFWwindow* window);
+		~Engine();
+		int run();
+		void engineUpdate(double deltaTime);
+		void fixedUpdate(double fixedDeltaTime);
+	};
+}

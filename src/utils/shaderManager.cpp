@@ -1,11 +1,11 @@
 #include "shaderManager.h"
 
-ShaderManager::~ShaderManager()
+Utils::ShaderManager::~ShaderManager()
 {
 	deleteAllProgramShaders();
 }
 
-GLuint ShaderManager::createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths)
+GLuint Utils::ShaderManager::createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths)
 {
 	std::vector<GLuint> shaders;
 
@@ -21,7 +21,7 @@ GLuint ShaderManager::createProgram(const std::vector<std::pair<std::string, GLe
 	return shaderProgram;
 }
 
-GLuint ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& shaders)
+GLuint Utils::ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& shaders)
 {
 	for (GLuint shader : shaders)
 	{
@@ -56,23 +56,23 @@ GLuint ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& sha
 	return program;
 }
 
-GLuint ShaderManager::getActiveProgram()
+GLuint Utils::ShaderManager::getActiveProgram()
 {
 	GLint program;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 	return static_cast<GLuint>(program);
 }
 
-GLuint ShaderManager::createShader(const char* path, GLenum type)
+GLuint Utils::ShaderManager::createShader(const char* path, GLenum type)
 {
-	std::string source = FileManager::readFile(path);
+	std::string source = Utils::FileManager::readFile(path);
 	const char* parsedSource = source.data();
 
 	GLuint shader = compileShader(parsedSource, type);
 	return shader;
 }
  
-GLuint ShaderManager::compileShader(const char* source, GLenum type)
+GLuint Utils::ShaderManager::compileShader(const char* source, GLenum type)
 {
 	GLuint shader = glCreateShader(type);
 	glShaderSource(shader, 1, &source, NULL);
@@ -83,11 +83,10 @@ GLuint ShaderManager::compileShader(const char* source, GLenum type)
 		deleteShadersFromActiveProgram();
 		return 0;
 	}
-
 	return shader;
 }
 
-GLint ShaderManager::debugShader(GLuint shader) const
+GLint Utils::ShaderManager::debugShader(GLuint shader) const
 {
 	GLint compiled = 0;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
@@ -105,7 +104,7 @@ GLint ShaderManager::debugShader(GLuint shader) const
 	return EXIT_SUCCESS;
 }
 
-GLint ShaderManager::debugProgram(GLuint program) const
+GLint Utils::ShaderManager::debugProgram(GLuint program) const
 {
 	GLint shaderLinked = 0;
 	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
@@ -124,7 +123,7 @@ GLint ShaderManager::debugProgram(GLuint program) const
 	return EXIT_SUCCESS;
 }
 
-void ShaderManager::deleteShadersFromActiveProgram()
+void Utils::ShaderManager::deleteShadersFromActiveProgram()
 {
 	GLuint activeProgram = getActiveProgram();
 
@@ -143,7 +142,7 @@ void ShaderManager::deleteShadersFromActiveProgram()
 	}
 }
 
-void ShaderManager::deleteAllProgramShaders()
+void Utils::ShaderManager::deleteAllProgramShaders()
 {
 	for (auto& entry : programShaders) 
 	{

@@ -1,6 +1,6 @@
 #include "application.h"
 
-Application::~Application()
+EntryPoint::Application::~Application()
 {
 	if (mLogger)
 	{
@@ -28,7 +28,7 @@ Application::~Application()
 	glfwTerminate();
 }
 
-int Application::run()
+int EntryPoint::Application::run()
 {
 	std::cout << "running application" << std::endl;
 
@@ -54,11 +54,11 @@ int Application::run()
 	}
 
 
-	mEngine = new Engine(mWindow);
+	mEngine = new Engine::Engine(mWindow);
 	return mEngine->run();
 }
 
-int Application::init()
+int EntryPoint::Application::init()
 {
 	if (!glfwInit())
 	{
@@ -72,12 +72,12 @@ int Application::init()
 	return EXIT_SUCCESS;
 }
 
-GLFWwindow* Application::getWindow() const
+GLFWwindow* EntryPoint::Application::getWindow() const
 {
 	return mWindow;
 }
 
-int Application::createWindow()
+int EntryPoint::Application::createWindow()
 {
 	glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
@@ -136,22 +136,22 @@ int Application::createWindow()
 	setupDefaultKeybinds();
 }
 
-void Application::frameBufferCallback(GLFWwindow* window, int width, int height)
+void EntryPoint::Application::frameBufferCallback(GLFWwindow* window, int width, int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
 }
 
-void Application::setupDefaultKeybinds()
+void EntryPoint::Application::setupDefaultKeybinds()
 {
 	InputManager::registerKeybind(Application::changeGLPolygonMode, Key::T);
 }
 
-void Application::setupDebugKeybinds()
+void EntryPoint::Application::setupDebugKeybinds()
 {
 }
 
-void Application::changeGLPolygonMode()
+void EntryPoint::Application::changeGLPolygonMode()
 {
 	GLint currentPolygonMode;
 	glGetIntegerv(GL_FRONT_AND_BACK, &currentPolygonMode);

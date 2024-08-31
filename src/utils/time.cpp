@@ -1,32 +1,32 @@
 #include "time.h"
 
-double Time::deltaTime;
-double Time::fixedDeltaTime;
-double Time::previousTime;
+double Utils::Time::deltaTime;
+double Utils::Time::fixedDeltaTime;
+double Utils::Time::previousTime;
 
-Time::Time()
+Utils::Time::Time()
 {
 	fixedDeltaTime = 1.0 / 60.0;
 	previousTime = glfwGetTime();
 }
 
-Time::~Time()
+Utils::Time::~Time()
 {
 }
 
-void Time::timeUpdate()
+void Utils::Time::timeUpdate()
 {
 	double currentTime = glfwGetTime();
 	deltaTime = static_cast<double>(currentTime - previousTime);
 	previousTime = currentTime;
 }
 
-double Time::getDeltaTime() 
+double Utils::Time::getDeltaTime()
 {
 	return deltaTime;
 }
 
-double Time::getFixedDeltaTime()
+double Utils::Time::getFixedDeltaTime()
 {
 	return fixedDeltaTime;
 }

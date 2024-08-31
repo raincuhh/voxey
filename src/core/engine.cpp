@@ -1,10 +1,10 @@
 #include "engine.h"
 
-Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mRenderer(nullptr), mTime(nullptr), mPhysics(nullptr)
+Engine::Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mRenderer(nullptr), mTime(nullptr), mPhysics(nullptr)
 {
 }
 
-Engine::~Engine()
+Engine::Engine::~Engine()
 {
     if (mRenderer)
     {
@@ -25,17 +25,15 @@ Engine::~Engine()
     }
 }
 
-int Engine::run()
+int Engine::Engine::run()
 {
-    std::cout << "running engine" << std::endl;
-
     glfwSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
     glFrontFace(GL_CCW);
     glCullFace(GL_CW);
 
-    mTime = new Time();
-    mRenderer = new Renderer(mWindow);
+    mTime = new Utils::Time();
+    mRenderer = new Rendering::Renderer(mWindow);
     mPhysics = new Physics();
 
     double timeAccu = 0.0;
@@ -66,10 +64,10 @@ int Engine::run()
     return EXIT_SUCCESS;
 }
 
-void Engine::engineUpdate([[maybe_unused]] double deltaTime)
+void Engine::Engine::engineUpdate([[maybe_unused]] double deltaTime)
 {
 }
 
-void Engine::fixedUpdate([[maybe_unused]] double fixedDeltaTime)
+void Engine::Engine::fixedUpdate([[maybe_unused]] double fixedDeltaTime)
 {
 }

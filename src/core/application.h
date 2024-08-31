@@ -10,6 +10,34 @@
 #include "../input/inputManager.h"
 
 
+namespace EntryPoint
+{
+	class Application
+	{
+	public:
+		~Application();
+		int run();
+		int init();
+
+		GLFWwindow* getWindow() const;
+
+	private:
+		GLFWwindow* mWindow;
+
+		Logger* mLogger;
+		Engine::Engine* mEngine;
+		InputManager* mInputManager;
+
+		int createWindow();
+		static void frameBufferCallback(GLFWwindow* window, int width, int height);
+		void setupDefaultKeybinds();
+		void setupDebugKeybinds();
+
+		static void changeGLPolygonMode();
+	};
+}
+
+/*
 class Application
 {
 public:
@@ -33,3 +61,5 @@ private:
 
 	static void changeGLPolygonMode();
 };
+
+*/

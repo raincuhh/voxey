@@ -1,11 +1,11 @@
 #include "renderer.h"
 
-Renderer::Renderer(GLFWwindow* window) : mWindow(window)
+Rendering::Renderer::Renderer(GLFWwindow* window) : mWindow(window)
 {
 	init();
 }
 
-Renderer::~Renderer()
+Rendering::Renderer::~Renderer()
 {
 	for (unsigned int shader : compiledShaderList)
 	{
@@ -16,7 +16,7 @@ Renderer::~Renderer()
 	glDeleteBuffers(1, &mEBO);
 }
 
-void Renderer::init() 
+void Rendering::Renderer::init()
 {
 	int blockRenderSize = 16;
 
@@ -26,7 +26,7 @@ void Renderer::init()
 		{
 			for (int z = 0; z < 16; z++)
 			{
-				Block block(Block::BLOCK_TYPE_GRASS);
+				Rendering::Block block(Block::BLOCK_TYPE_GRASS);
 				block.translateModelMatrix(glm::vec3(x, y, z));
 				blockList.push_back(block);
 			}
@@ -37,7 +37,7 @@ void Renderer::init()
 	//Block block1(Block::BLOCK_TYPE_GRASS);
 	//blockList.push_back(block1);
 
-	mShaderManager = new ShaderManager();
+	mShaderManager = new Utils::ShaderManager();
 
 	setupShaderProgram();
 	if (mShaderProgram == 0)
@@ -68,7 +68,7 @@ void Renderer::init()
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProj));
 }
 
-void Renderer::renderUpdate(double deltaTime) const
+void Rendering::Renderer::renderUpdate(double deltaTime) const
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
@@ -87,7 +87,7 @@ void Renderer::renderUpdate(double deltaTime) const
 	}
 }
 
-void Renderer::setupShaderProgram()
+void Rendering::Renderer::setupShaderProgram()
 {
 	std::vector<std::pair<std::string, GLenum>> shaders = {
 		{"shaders/vertexShader.vert", GL_VERTEX_SHADER},

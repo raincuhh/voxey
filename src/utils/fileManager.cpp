@@ -1,6 +1,6 @@
 #include "fileManager.h"
 
-std::string FileManager::readFile(const char* filePath, bool debug)
+std::string Utils::FileManager::readFile(const char* filePath, bool debug)
 {
 	std::string content = "";
 	std::ifstream file(filePath);

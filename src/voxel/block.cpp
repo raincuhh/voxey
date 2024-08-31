@@ -71,7 +71,7 @@ const unsigned int indices[] = {
 	21, 22, 23, // triangle2
 };
 
-Block::Block(BlockTypes type)
+Rendering::Block::Block(BlockTypes type)
 {
 	setType(type);
 	fragColorValue = inferBlockType(type);
@@ -81,11 +81,11 @@ Block::Block(BlockTypes type)
 	setupModelMatrix();
 }
 
-Block::~Block()
+Rendering::Block::~Block()
 {
 }
 
-void Block::draw([[maybe_unused]] unsigned int shaderProgram) const
+void Rendering::Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 {
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 
@@ -94,27 +94,27 @@ void Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 	glBindVertexArray(0);
 }
 
-void Block::setType(Block::BlockTypes type)
+void Rendering::Block::setType(Block::BlockTypes type)
 {
 	mBlockType = type;
 }
 
-Block::BlockTypes Block::getType() const
+Rendering::Block::BlockTypes Rendering::Block::getType() const
 {
 	return mBlockType;
 }
 
-void Block::translateModelMatrix(glm::vec3 translate)
+void Rendering::Block::translateModelMatrix(glm::vec3 translate)
 {
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(translate.x, translate.y, translate.z));
 }
 
-glm::mat4 Block::getModelMatrix() const
+glm::mat4 Rendering::Block::getModelMatrix() const
 {
 	return modelMatrix;
 }
 
-void Block::setupMesh()
+void Rendering::Block::setupMesh()
 {
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
@@ -134,23 +134,23 @@ void Block::setupMesh()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 }
 
-void Block::setupTexture()
+void Rendering::Block::setupTexture()
 {
-	int success = TextureLoader::LoadTexture("assets/testing/placeholder.png", mTexture);
+	int success = Utils::TextureLoader::LoadTexture("assets/testing/placeholder.png", mTexture);
 	if (success != 1)
 	{
 		std::cerr << "error loading texture" << std::endl;
 	}
 }
 
-void Block::setupModelMatrix()
+void Rendering::Block::setupModelMatrix()
 {
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	//modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 5.0f));
 }
 
 
-glm::vec3 Block::inferBlockType(BlockTypes type)
+glm::vec3 Rendering::Block::inferBlockType(BlockTypes type)
 {
 	switch (type)
 	{

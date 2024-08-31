@@ -1,6 +1,6 @@
 #include "textureLoader.h"
 
-int TextureLoader::LoadTexture(const std::string& filePath, unsigned int& texture)
+int Utils::TextureLoader::LoadTexture(const std::string& filePath, unsigned int& texture)
 {
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);

@@ -8,6 +8,7 @@
 #include "logger.h"
 #include "engine.h"
 #include "../input/inputManager.h"
+#include "../utils/windowManager.h"
 
 
 namespace EntryPoint

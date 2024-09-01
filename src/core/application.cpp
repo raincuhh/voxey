@@ -60,7 +60,7 @@ int EntryPoint::Application::run()
 
 int EntryPoint::Application::init()
 {
-	if (!glfwInit())
+	if (!WindowManager::glfwInit())
 	{
 		std::cout << "failed to init GLFW" << std::endl;
 		return EXIT_FAILURE;
@@ -95,11 +95,11 @@ int EntryPoint::Application::createWindow()
 	const auto primMonitor = glfwGetPrimaryMonitor();
 	const auto primMonitorVideoMode = glfwGetVideoMode(primMonitor);
 
-	const std::string title = "Voxey";
+	const char* title = "Voxey";
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
 
-	mWindow = glfwCreateWindow(windowWidth, windowHeight, title.data(), nullptr, nullptr);
+	mWindow = glfwCreateWindow(windowWidth, windowHeight, title, nullptr, nullptr);
 	if (!mWindow)
 	{
 		std::cout << "error creating GLFW window" << std::endl;

@@ -41,33 +41,41 @@ int Engine::Engine::run()
 
     while (!glfwWindowShouldClose(mWindow))
     {
-        mTime->timeUpdate();
-        double deltaTime = mTime->getDeltaTime();
-
-        timeAccu += deltaTime;
-        std::cout << "deltaTime: " << deltaTime << std::endl;
-
-        while (timeAccu >= fixedDeltaTime)
-        {
-            mPhysics->physicsUpdate(fixedDeltaTime);
-            //TODO: gameLogic->update(); gamelogic ie being whatever gamelogic shit
-
-            timeAccu -= fixedDeltaTime;
-        }
-
-        engineUpdate(deltaTime);
-        mRenderer->renderUpdate(deltaTime);
-
-        glfwSwapBuffers(mWindow);
-        glfwPollEvents();
+        engineUpdate(timeAccu, fixedDeltaTime);
     }
     return EXIT_SUCCESS;
 }
 
-void Engine::Engine::engineUpdate([[maybe_unused]] double deltaTime)
+void Engine::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
 {
+    if (mTime != nullptr)
+    {
+        mTime->timeUpdate();
+    }
+
+    double deltaTime = mTime->getDeltaTime();
+    timeAccu += deltaTime;
+
+    while (timeAccu >= fixedDeltaTime)
+    {
+        if (mPhysics != nullptr)
+        {
+            mPhysics->physicsUpdate(fixedDeltaTime);
+        }
+
+        //TODO: gameLogic->update();
+
+        timeAccu -= fixedDeltaTime;
+    }
+
+    if (mRenderer != nullptr)
+    {
+        mRenderer->renderUpdate(deltaTime);
+    }
+
+    glfwSwapBuffers(mWindow);
+    glfwPollEvents();
 }
 
-void Engine::Engine::fixedUpdate([[maybe_unused]] double fixedDeltaTime)
-{
-}
+
+

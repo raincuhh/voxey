@@ -9,6 +9,7 @@
 #include "../rendering/renderer.h"
 #include "../physics/physics.h"
 #include "../utils/time.h"
+#include "../debug/fps.h"
 
 namespace Engine 
 {
@@ -25,7 +26,6 @@ namespace Engine
 		Engine(GLFWwindow* window);
 		~Engine();
 		int run();
-		void engineUpdate(double deltaTime);
-		void fixedUpdate(double fixedDeltaTime);
+		void engineUpdate(double timeAccu, const double fixedDeltaTime);
 	};
 }

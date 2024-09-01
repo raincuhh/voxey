@@ -11,10 +11,10 @@ namespace Debug
 	{
 	public:
 		Fps();
-		void updateFps();
+		void fpsUpdate();
 
 	private:
-		unsigned frames;
+		unsigned int frames;
 		double previousSecond;
 	};
 }

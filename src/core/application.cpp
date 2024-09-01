@@ -1,6 +1,12 @@
 #include "application.h"
 
-EntryPoint::Application::~Application()
+Application::Application(int argc, char** argv[]) : 
+	mWindow(nullptr)
+{
+	std::cout << "argc: " << argc << " argv: " << argv << std::endl;
+}
+
+Application::~Application()
 {
 	if (mWindow)
 	{
@@ -10,7 +16,7 @@ EntryPoint::Application::~Application()
 	GraphicsManager::terminateGlfw();
 }
 
-int EntryPoint::Application::run()
+int Application::run()
 {
 	std::cout << "running application" << std::endl;
 
@@ -38,17 +44,17 @@ int EntryPoint::Application::run()
 	return mEngine->run();
 }
 
-int EntryPoint::Application::init()
+int Application::init()
 {
 	return GraphicsManager::glfwInit();
 }
 
-GLFWwindow* EntryPoint::Application::getWindow()
+GLFWwindow* Application::getWindow()
 {
 	return mWindow;
 }
 
-int EntryPoint::Application::createWindow()
+int Application::createWindow()
 {
 	GraphicsManager::windowHintInit();
 
@@ -82,23 +88,23 @@ int EntryPoint::Application::createWindow()
 	return EXIT_SUCCESS;
 }
 
-void EntryPoint::Application::frameBufferCallback(GLFWwindow* window, int width, int height)
+void Application::frameBufferCallback(GLFWwindow* window, int width, int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
 }
 
-void EntryPoint::Application::setupDefaultKeybinds()
+void Application::setupDefaultKeybinds()
 {
-	InputManager::registerKeybind(EntryPoint::Application::changeGLPolygonMode, Key::T);
+	InputManager::registerKeybind(Application::changeGLPolygonMode, Key::T);
 	InputManager::registerKeybind([this]() { this->escapeApplication(); }, Key::ESCAPE);
 }
 
-void EntryPoint::Application::setupDebugKeybinds()
+void Application::setupDebugKeybinds()
 {
 }
 
-void EntryPoint::Application::changeGLPolygonMode()
+void Application::changeGLPolygonMode()
 {
 	std::cout << "type shi" << std::endl;
 	GLint currentPolygonMode[2];
@@ -113,7 +119,7 @@ void EntryPoint::Application::changeGLPolygonMode()
 	}
 }
 
-void EntryPoint::Application::escapeApplication()
+void Application::escapeApplication()
 {
 	glfwSetWindowShouldClose(getWindow(), GL_TRUE);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <chrono>
 
 #include "../utils/graphicsManager.h"
@@ -13,17 +14,17 @@ namespace Engine
 {
 	class Engine
 	{
-	private:
-		GLFWwindow* mWindow;
-		Engine* mEngine;
-		Rendering::Renderer* mRenderer;
-		Utils::Time* mTime;
-		Physics* mPhysics;
-
 	public:
 		Engine(GLFWwindow* window);
 		~Engine();
 		int run();
 		void engineUpdate(double timeAccu, const double fixedDeltaTime);
+
+	private:
+		GLFWwindow* mWindow;
+
+		std::unique_ptr<Utils::Time> mTime;
+		std::unique_ptr<Rendering::Renderer> mRenderingEngine;
+		std::unique_ptr<Physics> mPhysicsEngine;
 	};
 }

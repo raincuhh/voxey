@@ -11,7 +11,7 @@
 #include "../../include/glm/glm.hpp"
 #include "../utils/shaderManager.h"
 #include "../utils/fileManager.h"
-#include "../voxel/block.h"
+#include "block.h"
 
 
 namespace Rendering {

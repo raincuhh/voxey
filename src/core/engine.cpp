@@ -1,28 +1,15 @@
 #include "engine.h"
 
-Engine::Engine::Engine(GLFWwindow* window) : mWindow(window), mEngine(nullptr), mRenderer(nullptr), mTime(nullptr), mPhysics(nullptr)
+Engine::Engine::Engine(GLFWwindow* window) : 
+    mWindow(window), 
+    mTime(nullptr),
+    mRenderingEngine(nullptr), 
+    mPhysicsEngine(nullptr)
 {
 }
 
 Engine::Engine::~Engine()
 {
-    if (mRenderer)
-    {
-        delete mRenderer;
-        mRenderer = nullptr;
-    }
-
-    if (mPhysics)
-    {
-        delete mPhysics;
-        mPhysics = nullptr;
-    }
-
-    if (mTime)
-    {
-        delete mTime;
-        mTime = nullptr;
-    }
 }
 
 int Engine::Engine::run()
@@ -32,9 +19,9 @@ int Engine::Engine::run()
     GraphicsManager::setFrontFace(GL_CCW);
     GraphicsManager::setCullFace(GL_CW);
 
-    mTime = new Utils::Time();
-    mRenderer = new Rendering::Renderer(mWindow);
-    mPhysics = new Physics();
+    mTime = std::make_unique<Utils::Time>();
+    mRenderingEngine = std::make_unique<Rendering::Renderer>(mWindow);
+    mPhysicsEngine = std::make_unique<Physics>();
 
     double timeAccu = 0.0;
     const double fixedDeltaTime = mTime->getFixedDeltaTime();
@@ -58,9 +45,9 @@ void Engine::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
 
     while (timeAccu >= fixedDeltaTime)
     {
-        if (mPhysics != nullptr)
+        if (mPhysicsEngine != nullptr)
         {
-            mPhysics->physicsUpdate(fixedDeltaTime);
+            mPhysicsEngine->physicsUpdate(fixedDeltaTime);
         }
 
         //TODO: gameLogic->update();
@@ -68,9 +55,9 @@ void Engine::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
         timeAccu -= fixedDeltaTime;
     }
 
-    if (mRenderer != nullptr)
+    if (mRenderingEngine != nullptr)
     {
-        mRenderer->renderUpdate(deltaTime);
+        mRenderingEngine->renderUpdate(deltaTime);
     }
 
     GraphicsManager::swapBuffers(mWindow);

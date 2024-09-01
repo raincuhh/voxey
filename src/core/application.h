@@ -1,14 +1,12 @@
 #pragma once
 
 #include <iostream>
-
-#include "../../include/glad/glad.h"
-#include "../../include/GLFW/glfw3.h"
+#include <memory>
 
 #include "logger.h"
 #include "engine.h"
 #include "../input/inputManager.h"
-#include "../utils/windowManager.h"
+#include "../utils/graphicsManager.h"
 
 
 namespace EntryPoint
@@ -20,14 +18,16 @@ namespace EntryPoint
 		int run();
 		int init();
 
-		GLFWwindow* getWindow() const;
+		GLFWwindow* getWindow();
+		void escapeApplication();
+
 
 	private:
 		GLFWwindow* mWindow;
 
-		Logger* mLogger;
-		Engine::Engine* mEngine;
-		InputManager* mInputManager;
+		std::unique_ptr<Logger> mLogger;
+		std::unique_ptr<Engine::Engine> mEngine;
+		std::unique_ptr<InputManager> mInputManager;
 
 		int createWindow();
 		static void frameBufferCallback(GLFWwindow* window, int width, int height);
@@ -37,30 +37,3 @@ namespace EntryPoint
 		static void changeGLPolygonMode();
 	};
 }
-
-/*
-class Application
-{
-public:
-	~Application();
-	int run();
-	int init();
-
-	GLFWwindow* getWindow() const;
-
-private:
-	GLFWwindow* mWindow;
-
-	Logger* mLogger;
-	Engine* mEngine;
-	InputManager* mInputManager;
-
-	int createWindow();
-	static void frameBufferCallback(GLFWwindow* window, int width, int height);
-	void setupDefaultKeybinds();
-	void setupDebugKeybinds();
-
-	static void changeGLPolygonMode();
-};
-
-*/

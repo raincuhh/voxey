@@ -2,30 +2,12 @@
 
 EntryPoint::Application::~Application()
 {
-	if (mLogger)
-	{
-		delete mLogger;
-		mLogger = nullptr;
-	}
-
-	if (mEngine)
-	{
-		delete mEngine;
-		mEngine = nullptr;
-	}
-
-	if (mInputManager)
-	{
-		delete mInputManager;
-		mInputManager = nullptr;
-	}
-
 	if (mWindow)
 	{
-		glfwDestroyWindow(mWindow);
+		GraphicsManager::destroyWindow(mWindow);
 		mWindow = nullptr;
 	}
-	glfwTerminate();
+	GraphicsManager::terminateGlfw();
 }
 
 int EntryPoint::Application::run()
@@ -52,88 +34,52 @@ int EntryPoint::Application::run()
 	{
 		return EXIT_FAILURE;
 	}
-
-
-	mEngine = new Engine::Engine(mWindow);
+	mEngine = std::make_unique<Engine::Engine>(mWindow);
 	return mEngine->run();
 }
 
 int EntryPoint::Application::init()
 {
-	if (!WindowManager::glfwInit())
-	{
-		std::cout << "failed to init GLFW" << std::endl;
-		return EXIT_FAILURE;
-	}
-	else
-	{
-		std::cout << "passed init GLFW" << std::endl;
-	}
-	return EXIT_SUCCESS;
+	return GraphicsManager::glfwInit();
 }
 
-GLFWwindow* EntryPoint::Application::getWindow() const
+GLFWwindow* EntryPoint::Application::getWindow()
 {
 	return mWindow;
 }
 
 int EntryPoint::Application::createWindow()
 {
-	glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	GraphicsManager::windowHintInit();
 
-	#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	#endif
+	const auto primaryMonitor = GraphicsManager::getPrimaryMonitor();
+	const auto primaryMonitorVideoMode = GraphicsManager::getVideoMode(primaryMonitor);
 
-	const auto primMonitor = glfwGetPrimaryMonitor();
-	const auto primMonitorVideoMode = glfwGetVideoMode(primMonitor);
+	const auto screenWidth = primaryMonitorVideoMode->width;
+	const auto screenHeight = primaryMonitorVideoMode->height;
 
 	const char* title = "Voxey";
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
 
-	mWindow = glfwCreateWindow(windowWidth, windowHeight, title, nullptr, nullptr);
+	mWindow = GraphicsManager::createWindow(windowWidth, windowHeight, title, nullptr, nullptr);
+	
 	if (!mWindow)
 	{
-		std::cout << "error creating GLFW window" << std::endl;
 		return EXIT_FAILURE;
 	}
-	else
-	{
-		std::cout << "created GLFW window" << std::endl;
-	}
 
-	const auto screenWidth = primMonitorVideoMode->width;
-	const auto screenHeight = primMonitorVideoMode->height;
+	GraphicsManager::setWindowPos(mWindow, screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);
+	GraphicsManager::setCurrentContext(mWindow);
+	GraphicsManager::setFrameBufferCallback(mWindow, frameBufferCallback);
 
-	glfwSetWindowPos(mWindow, screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);
+	mInputManager = std::make_unique<InputManager>();
+	mInputManager->init(mWindow, mInputManager.get());
 
-	glfwMakeContextCurrent(mWindow);
-	glfwSetFramebufferSizeCallback(mWindow, frameBufferCallback);
-
-	//mInputManager = new InputManager(mWindow);
-	mInputManager = new InputManager();
-	mInputManager->init(mWindow, mInputManager);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "failed to init GLAD";
-		return EXIT_FAILURE;
-	}
-	else
-	{
-		std::cout << "passed init GLAD" << std::endl;
-		return EXIT_SUCCESS;
-	}
+	GraphicsManager::gladInit();
 
 	setupDefaultKeybinds();
+	return EXIT_SUCCESS;
 }
 
 void EntryPoint::Application::frameBufferCallback(GLFWwindow* window, int width, int height)
@@ -144,7 +90,8 @@ void EntryPoint::Application::frameBufferCallback(GLFWwindow* window, int width,
 
 void EntryPoint::Application::setupDefaultKeybinds()
 {
-	InputManager::registerKeybind(Application::changeGLPolygonMode, Key::T);
+	InputManager::registerKeybind(EntryPoint::Application::changeGLPolygonMode, Key::T);
+	InputManager::registerKeybind([this]() { this->escapeApplication(); }, Key::ESCAPE);
 }
 
 void EntryPoint::Application::setupDebugKeybinds()
@@ -153,15 +100,20 @@ void EntryPoint::Application::setupDebugKeybinds()
 
 void EntryPoint::Application::changeGLPolygonMode()
 {
-	GLint currentPolygonMode;
-	glGetIntegerv(GL_FRONT_AND_BACK, &currentPolygonMode);
+	std::cout << "type shi" << std::endl;
+	GLint currentPolygonMode[2];
+	glGetIntegerv(GL_POLYGON_MODE, currentPolygonMode);
 
-	if (currentPolygonMode == GL_LINES)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//GLenum newMode = (currentPolygonMode[0] == GL_LINES) ? GL_FILL : GL_LINES;
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR) {
+		std::cerr << "OpenGL Error: " << error << std::endl;
 	}
-	else if (currentPolygonMode == GL_FILL)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
-	}
+}
+
+void EntryPoint::Application::escapeApplication()
+{
+	glfwSetWindowShouldClose(getWindow(), GL_TRUE);
 }

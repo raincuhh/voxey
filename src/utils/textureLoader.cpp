@@ -1,12 +1,11 @@
 #include "textureLoader.h"
 
-int Utils::TextureLoader::LoadTexture(const std::string& filePath, unsigned int& texture)
+int Utils::TextureLoader::LoadTexture(const std::string& filePath, GLuint& texture)
 {
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	GraphicsManager::genTextures(1, &texture);
+	GraphicsManager::bindTexture(GL_TEXTURE_2D, texture);
+	GraphicsManager::textureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	GraphicsManager::textureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int width;
 	int height;
@@ -26,8 +25,8 @@ int Utils::TextureLoader::LoadTexture(const std::string& filePath, unsigned int&
 			(nrChannels == 3) ? GL_RGB :
 			(nrChannels == 4) ? GL_RGBA : GL_RGB;
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, texData);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		GraphicsManager::texImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, texData);
+		GraphicsManager::generateMipmap(GL_TEXTURE_2D);
 
 		stbi_image_free(texData);
 	}

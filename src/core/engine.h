@@ -3,9 +3,7 @@
 #include <iostream>
 #include <chrono>
 
-#include "../../include/glad/glad.h"
-#include "../../include/GLFW/glfw3.h"
-
+#include "../utils/graphicsManager.h"
 #include "../rendering/renderer.h"
 #include "../physics/physics.h"
 #include "../utils/time.h"

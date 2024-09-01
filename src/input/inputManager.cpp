@@ -1,6 +1,6 @@
 #include "inputManager.h"
 
-std::map<Key, void(*)()> InputManager::inputMap;
+std::map<Key, std::function<void()>> InputManager::inputMap;
 
 void InputManager::init(GLFWwindow* window, InputManager* instance)
 {
@@ -9,21 +9,24 @@ void InputManager::init(GLFWwindow* window, InputManager* instance)
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_FALSE);
 }
 
-void InputManager::registerKeybind(void(*callback)(), Key key)
+void InputManager::registerKeybind(const std::function<void()>& callback, Key key)
 {
 	inputMap[key] = callback;
-	//std::cout << "registered keybind: " << key << ", callback: " << reinterpret_cast<void(*)>(callback) << std::endl;
+    std::cout << "registered keybind: " << static_cast<int>(key) << std::endl;
 }
 
 void InputManager::keyPressed(Key key)
 {
-	if (inputMap[key])
-	{
-		inputMap[key]();
-	}
+    auto pressed = inputMap.find(key);
+
+    if (pressed != inputMap.end())
+    {
+        std::cout << "key found: " << static_cast<int>(key) << std::endl;
+        pressed->second();
+    }
     else
     {
-        std::cout << "key not found in inputMap" << std::endl;
+        std::cout << "key not found: " << static_cast<int>(key) << std::endl;
     }
 }
 
@@ -48,7 +51,7 @@ void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
 	if (action == GLFW_PRESS)
 	{
 		Key mappedKey = static_cast<Key>(key);
-        /*
+        
         switch (key)
         {
         case GLFW_KEY_ESCAPE: mappedKey = Key::ESCAPE; break;
@@ -153,7 +156,6 @@ void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
         case GLFW_KEY_NUM_LOCK: mappedKey = Key::NUM_LOCK; break;
         default: return;
         }
-        */
 		keyPressed(mappedKey);
 	}
 }

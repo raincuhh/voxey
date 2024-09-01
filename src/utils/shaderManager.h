@@ -6,7 +6,8 @@
 
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
-
+#include "../../include/glm/glm.hpp"
+#include "../../include/glm/gtc/type_ptr.hpp"
 #include "fileManager.h"
 
 namespace Utils 
@@ -17,8 +18,11 @@ namespace Utils
 		~ShaderManager();
 
 		GLuint createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths);
-		GLuint linkProgram(GLuint program, const std::vector<GLuint>& shaders);
-		GLuint getActiveProgram();
+		static GLuint linkProgram(GLuint program, const std::vector<GLuint>& shaders);
+		static GLuint getActiveProgram();
+
+		static void setUniformMat4fv(GLuint program, const char* name, const glm::mat4& matrix);
+		//
 
 	private:
 		GLuint createShader(const char* path, GLenum type);

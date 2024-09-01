@@ -1,6 +1,12 @@
 #include "renderer.h"
 
-Rendering::Renderer::Renderer(GLFWwindow* window) : mWindow(window)
+Rendering::Renderer::Renderer(GLFWwindow* window) :
+	mWindow(window),
+	mShaderManager(nullptr),
+	mShaderProgram(0),
+	mViewMatrix(glm::mat4(1.0f)),
+	mProjMatrix(glm::mat4(1.0f)),
+	compiledShaderList(0)
 {
 	init();
 }
@@ -11,9 +17,6 @@ Rendering::Renderer::~Renderer()
 	{
 		glDeleteShader(shader);
 	}
-
-	glDeleteBuffers(1, &mVAO);
-	glDeleteBuffers(1, &mEBO);
 }
 
 void Rendering::Renderer::init()
@@ -33,10 +36,6 @@ void Rendering::Renderer::init()
 		}
 	}
 
-
-	//Block block1(Block::BLOCK_TYPE_GRASS);
-	//blockList.push_back(block1);
-
 	mShaderManager = new Utils::ShaderManager();
 
 	setupShaderProgram();
@@ -46,26 +45,16 @@ void Rendering::Renderer::init()
 		return;
 	}
 
-	int width, height;
-	glfwGetWindowSize(mWindow, &width, &height);
-
-	float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-
+	int width;
+	int height;
+	float aspectRatio;
 	constexpr float fov = glm::radians(45.0f);
 
-	glm::mat4 viewMatrix = glm::mat4(1.0f);
-	glm::mat4 projMatrix = glm::mat4(1.0f);
+	glfwGetWindowSize(mWindow, &width, &height);
+	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
-	// change this shit
-	viewMatrix = glm::translate(viewMatrix, glm::vec3(-5.0f, -10.0f, -30.0f));
-	mView = viewMatrix;
-
-	projMatrix = glm::perspective(fov, aspectRatio, 0.1f, 100.0f);
-	mProj = projMatrix;
-
-	glUseProgram(mShaderProgram);
-	int projLoc = glGetUniformLocation(mShaderProgram, "projMatrix");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(mProj));
+	setViewMatrix(glm::translate(mViewMatrix, glm::vec3(-5.0f, -10.0f, -30.0f)));
+	setProjMatrix(glm::perspective(fov, aspectRatio, 0.1f, 100.0f));
 }
 
 void Rendering::Renderer::renderUpdate(double deltaTime) const
@@ -73,9 +62,7 @@ void Rendering::Renderer::renderUpdate(double deltaTime) const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
 
-	//not really worth having projMatrix being set every update because it rarely gets changed anyways
-	int viewLoc = glGetUniformLocation(mShaderProgram, "viewMatrix");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(mView));
+	updateShaderViewMatrix();
 
 
 	for (Block block : blockList)
@@ -87,6 +74,28 @@ void Rendering::Renderer::renderUpdate(double deltaTime) const
 	}
 }
 
+const glm::mat4& Rendering::Renderer::getViewMatrix() const
+{
+	return mViewMatrix;
+}
+
+void Rendering::Renderer::setViewMatrix(const glm::mat4& viewMatrix)
+{
+	mViewMatrix = viewMatrix;
+	updateShaderViewMatrix();
+}
+
+const glm::mat4& Rendering::Renderer::getProjMatrix() const
+{
+	return mProjMatrix;
+}
+
+void Rendering::Renderer::setProjMatrix(const glm::mat4& projMatrix)
+{
+	mProjMatrix = projMatrix;
+	updateShaderProjMatrix();
+}
+
 void Rendering::Renderer::setupShaderProgram()
 {
 	std::vector<std::pair<std::string, GLenum>> shaders = {
@@ -96,4 +105,14 @@ void Rendering::Renderer::setupShaderProgram()
 	};
 
 	mShaderProgram = mShaderManager->createProgram(shaders);
+}
+
+void Rendering::Renderer::updateShaderProjMatrix() const
+{
+	Utils::ShaderManager::setUniformMat4fv(mShaderProgram, "projMatrix", mProjMatrix);
+}
+
+void Rendering::Renderer::updateShaderViewMatrix() const
+{
+	Utils::ShaderManager::setUniformMat4fv(mShaderProgram, "viewMatrix", mViewMatrix);
 }

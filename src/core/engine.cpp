@@ -27,10 +27,10 @@ Engine::Engine::~Engine()
 
 int Engine::Engine::run()
 {
-    glfwSwapInterval(1);
-    glEnable(GL_DEPTH_TEST);
-    glFrontFace(GL_CCW);
-    glCullFace(GL_CW);
+    GraphicsManager::bufferSwapInterval(1);
+    GraphicsManager::enableDepthTest();
+    GraphicsManager::setFrontFace(GL_CCW);
+    GraphicsManager::setCullFace(GL_CW);
 
     mTime = new Utils::Time();
     mRenderer = new Rendering::Renderer(mWindow);
@@ -73,8 +73,8 @@ void Engine::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
         mRenderer->renderUpdate(deltaTime);
     }
 
-    glfwSwapBuffers(mWindow);
-    glfwPollEvents();
+    GraphicsManager::swapBuffers(mWindow);
+    GraphicsManager::pollEvents();
 }
 
 

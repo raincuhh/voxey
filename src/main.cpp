@@ -3,10 +3,6 @@
 #include <memory>
 #include "../src/core/application.h"
 
-// ###########################################################
-// ###                  welcome to main                    ###
-// ###########################################################
-
 int main(int argc, char** argv[])
 {
 	std::cout << "argc: " << argc << " argv: " << argv << std::endl;

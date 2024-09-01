@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <vector>
+#include <functional>
 #include <map>
 
 #include "../../include/glad/glad.h"
@@ -27,10 +29,10 @@ class InputManager
 {
 public:
 	static void init(GLFWwindow* window, InputManager* instance);
-	static void registerKeybind(void(*callback)(), Key key);
+	static void registerKeybind(const std::function<void()>& callback, Key key);
 
 private:
-	static std::map<Key, void(*)()> inputMap;
+	static std::map<Key, std::function<void()>> inputMap;
 
 	static void keyPressed(Key key);
 	static void windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

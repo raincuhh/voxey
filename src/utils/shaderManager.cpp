@@ -15,9 +15,9 @@ GLuint Utils::ShaderManager::createProgram(const std::vector<std::pair<std::stri
 		shaders.push_back(shader);
 	}
 
-	GLuint shaderProgram = linkProgram(glCreateProgram(), shaders);
-
+	GLuint shaderProgram = Utils::ShaderManager::linkProgram(glCreateProgram(), shaders);
 	programShaders[shaderProgram] = shaders;
+
 	return shaderProgram;
 }
 
@@ -29,9 +29,9 @@ GLuint Utils::ShaderManager::linkProgram(GLuint program, const std::vector<GLuin
 	}
 
 	glLinkProgram(program);
-
 	GLint linked = 0;
 	glGetProgramiv(program, GL_LINK_STATUS, &linked);
+
 	if (linked == GL_FALSE)
 	{
 		GLint logLen = 0;
@@ -52,7 +52,6 @@ GLuint Utils::ShaderManager::linkProgram(GLuint program, const std::vector<GLuin
 	{
 		glDetachShader(program, shader);
 	}
-
 	return program;
 }
 
@@ -63,6 +62,21 @@ GLuint Utils::ShaderManager::getActiveProgram()
 	return static_cast<GLuint>(program);
 }
 
+void Utils::ShaderManager::setUniformMat4fv(GLuint program, const char* name, const glm::mat4& matrix)
+{
+	glUseProgram(program);
+	int location = glGetUniformLocation(program, name);
+
+	if (location != -1)
+	{
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+	}
+	else
+	{
+		std::cerr << "warning: uniform '" << name << "' not found in shader program '" << program << "'" << std::endl;
+	}
+}
+
 GLuint Utils::ShaderManager::createShader(const char* path, GLenum type)
 {
 	std::string source = Utils::FileManager::readFile(path);
@@ -71,7 +85,7 @@ GLuint Utils::ShaderManager::createShader(const char* path, GLenum type)
 	GLuint shader = compileShader(parsedSource, type);
 	return shader;
 }
- 
+
 GLuint Utils::ShaderManager::compileShader(const char* source, GLenum type)
 {
 	GLuint shader = glCreateShader(type);
@@ -125,7 +139,7 @@ GLint Utils::ShaderManager::debugProgram(GLuint program) const
 
 void Utils::ShaderManager::deleteShadersFromActiveProgram()
 {
-	GLuint activeProgram = getActiveProgram();
+	GLuint activeProgram = Utils::ShaderManager::getActiveProgram();
 
 	if (programShaders.find(activeProgram) != programShaders.end())
 	{

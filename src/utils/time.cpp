@@ -7,7 +7,7 @@ double Utils::Time::previousTime;
 Utils::Time::Time()
 {
 	fixedDeltaTime = 1.0 / 60.0;
-	previousTime = glfwGetTime();
+	previousTime = GraphicsManager::getTime();
 }
 
 Utils::Time::~Time()
@@ -16,7 +16,7 @@ Utils::Time::~Time()
 
 void Utils::Time::timeUpdate()
 {
-	double currentTime = glfwGetTime();
+	double currentTime = GraphicsManager::getTime();
 	deltaTime = static_cast<double>(currentTime - previousTime);
 	previousTime = currentTime;
 }

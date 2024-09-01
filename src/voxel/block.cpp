@@ -6,7 +6,7 @@ struct vertex {
 	glm::vec2 textureCoords;
 };
 
-const vertex cubeVertices[] = {
+const vertex blockVertices[] = {
 	// front
 	{{ 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f }}, // top right
 	{{ 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f }}, // bottom right
@@ -77,7 +77,7 @@ Rendering::Block::Block(BlockTypes type)
 	fragColorValue = inferBlockType(type);
 
 	setupMesh();
-	setupTexture(); //currently renders some weird line strip texture
+	setupTexture();
 	setupModelMatrix();
 }
 
@@ -87,11 +87,11 @@ Rendering::Block::~Block()
 
 void Rendering::Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 {
-	glBindTexture(GL_TEXTURE_2D, mTexture);
+	GraphicsManager::bindTexture(GL_TEXTURE_2D, mTexture);
+	GraphicsManager::bindVertexArray(mVAO);
 
-	glBindVertexArray(mVAO);
-	glDrawElements(GL_TRIANGLES, sizeof(cubeVertices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	GraphicsManager::drawElements(GL_TRIANGLES, sizeof(blockVertices), GL_UNSIGNED_INT, 0); // sizeof(blockVertices) / sizeof(unsigned int)
+	GraphicsManager::bindVertexArray(0);
 }
 
 void Rendering::Block::setType(Block::BlockTypes type)
@@ -116,22 +116,24 @@ glm::mat4 Rendering::Block::getModelMatrix() const
 
 void Rendering::Block::setupMesh()
 {
-	glGenVertexArrays(1, &mVAO);
-	glBindVertexArray(mVAO);
+	GraphicsManager::genVertexArrays(1, &mVAO);
+	GraphicsManager::bindVertexArray(mVAO);
 
-	glGenBuffers(1, &mVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+	GraphicsManager::genBuffers(1, &mVBO);
+	GraphicsManager::bindBuffer(GL_ARRAY_BUFFER, mVBO);
+	GraphicsManager::bufferData(GL_ARRAY_BUFFER, sizeof(blockVertices), blockVertices, GL_STATIC_DRAW);
 	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, position));//3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	GraphicsManager::vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, position));
+	GraphicsManager::enableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, textureCoords)); //(void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	GraphicsManager::vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, textureCoords));
+	GraphicsManager::enableVertexAttribArray(1);
 
-	glGenBuffers(1, &mEBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	GraphicsManager::genBuffers(1, &mEBO);
+	GraphicsManager::bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+	GraphicsManager::bufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	GraphicsManager::bindVertexArray(0);
 }
 
 void Rendering::Block::setupTexture()

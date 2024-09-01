@@ -7,14 +7,12 @@
 #include <vector>
 #include <memory>
 
-#include "../../include/glad/glad.h"
-#include "../../include/GLFW/glfw3.h"
-
+#include "../utils/graphicsManager.h"
 #include "../../include/glm/glm.hpp"
-
 #include "../utils/shaderManager.h"
 #include "../utils/fileManager.h"
 #include "../voxel/block.h"
+
 
 namespace Rendering {
 	class Renderer
@@ -22,24 +20,29 @@ namespace Rendering {
 	public:
 		Renderer(GLFWwindow* window);
 		~Renderer();
+
 		void init();
 		void renderUpdate(double dt) const;
 
+		const glm::mat4& getViewMatrix() const;
+		void setViewMatrix(const glm::mat4& viewMatrix);
+
+		const glm::mat4& getProjMatrix() const;
+		void setProjMatrix(const glm::mat4& projMatrix);
+
 	private:
 		GLFWwindow* mWindow;
-
 		Utils::ShaderManager* mShaderManager;
 		GLuint mShaderProgram;
-
-		glm::mat4 mView;
-		glm::mat4 mProj;
+		glm::mat4 mViewMatrix;
+		glm::mat4 mProjMatrix;
 
 		std::vector<unsigned int> compiledShaderList;
 		std::vector<Block> blockList;
 
-		unsigned int mVAO;
-		unsigned int mEBO;
-
 		void setupShaderProgram();
+
+		void updateShaderProjMatrix() const;
+		void updateShaderViewMatrix() const;
 	};
 }

@@ -3,8 +3,7 @@
 #include <iostream>
 //#include <chrono>
 
-#include "../../include/glad/glad.h"
-#include "../../include/GLFW/glfw3.h"
+#include "graphicsManager.h"
 
 namespace Utils
 {

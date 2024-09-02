@@ -1,12 +1,11 @@
 #include "application.h"
 
-Application::Application(int argc, char** argv[]) : 
-	mWindow(nullptr)
+Voxey::Core::Application::Application(int argc, char** argv[]) : mWindow(nullptr)
 {
 	std::cout << "argc: " << argc << " argv: " << argv << std::endl;
 }
 
-Application::~Application()
+Voxey::Core::Application::~Application()
 {
 	if (mWindow)
 	{
@@ -16,7 +15,7 @@ Application::~Application()
 	GraphicsManager::terminateGlfw();
 }
 
-int Application::run()
+int Voxey::Core::Application::run()
 {
 	std::cout << "running application" << std::endl;
 
@@ -40,21 +39,21 @@ int Application::run()
 	{
 		return EXIT_FAILURE;
 	}
-	mEngine = std::make_unique<Engine::Engine>(mWindow);
+	mEngine = std::make_unique<Core::Engine>(mWindow);
 	return mEngine->run();
 }
 
-int Application::init()
+int Voxey::Core::Application::init()
 {
 	return GraphicsManager::glfwInit();
 }
 
-GLFWwindow* Application::getWindow()
+GLFWwindow* Voxey::Core::Application::getWindow()
 {
 	return mWindow;
 }
 
-int Application::createWindow()
+int Voxey::Core::Application::createWindow()
 {
 	GraphicsManager::windowHintInit();
 
@@ -88,23 +87,23 @@ int Application::createWindow()
 	return EXIT_SUCCESS;
 }
 
-void Application::frameBufferCallback(GLFWwindow* window, int width, int height)
+void Voxey::Core::Application::frameBufferCallback(GLFWwindow* window, int width, int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
 }
 
-void Application::setupDefaultKeybinds()
+void Voxey::Core::Application::setupDefaultKeybinds()
 {
 	InputManager::registerKeybind(Application::changeGLPolygonMode, Key::T);
 	InputManager::registerKeybind([this]() { this->escapeApplication(); }, Key::ESCAPE);
 }
 
-void Application::setupDebugKeybinds()
+void Voxey::Core::Application::setupDebugKeybinds()
 {
 }
 
-void Application::changeGLPolygonMode()
+void Voxey::Core::Application::changeGLPolygonMode()
 {
 	std::cout << "type shi" << std::endl;
 	GLint currentPolygonMode[2];
@@ -119,7 +118,7 @@ void Application::changeGLPolygonMode()
 	}
 }
 
-void Application::escapeApplication()
+void Voxey::Core::Application::escapeApplication()
 {
 	glfwSetWindowShouldClose(getWindow(), GL_TRUE);
 }

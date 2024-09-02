@@ -10,7 +10,7 @@
 #include "../utils/time.h"
 #include "../debug/fps.h"
 
-namespace Engine 
+namespace Voxey::Core 
 {
 	class Engine
 	{

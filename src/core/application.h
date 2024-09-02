@@ -9,28 +9,32 @@
 #include "../utils/graphicsManager.h"
 
 
-class Application
+namespace Voxey::Core
 {
-public:
-	Application(int argc, char** argv[]);
-	~Application();
+	class Application
+	{
+	public:
+		Application(int argc, char** argv[]);
+		~Application();
 
-	int run();
-	int init();
+		int run();
+		int init();
 
-	GLFWwindow* getWindow();
-	void escapeApplication();
+		GLFWwindow* getWindow();
+		void escapeApplication();
 
-private:
-	GLFWwindow* mWindow;
+	private:
+		GLFWwindow* mWindow;
 
-	std::unique_ptr<Logger> mLogger;
-	std::unique_ptr<Engine::Engine> mEngine;
-	std::unique_ptr<InputManager> mInputManager;
+		std::unique_ptr<Voxey::Core::Logger> mLogger;
+		std::unique_ptr<Voxey::Core::Engine> mEngine;
+		std::unique_ptr<InputManager> mInputManager;
 
-	int createWindow();
-	static void frameBufferCallback(GLFWwindow* window, int width, int height);
-	void setupDefaultKeybinds();
-	void setupDebugKeybinds();
-	static void changeGLPolygonMode();
-};
+		int createWindow();
+		static void frameBufferCallback(GLFWwindow* window, int width, int height);
+		void setupDefaultKeybinds();
+		void setupDebugKeybinds();
+		static void changeGLPolygonMode();
+	};
+}
+

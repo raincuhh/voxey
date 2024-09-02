@@ -4,6 +4,6 @@
 
 int main(int argc, char** argv[])
 {
-	auto application = std::make_unique<Application>(argc, argv);
+	auto application = std::make_unique<Voxey::Core::Application>(argc, argv);
 	return application->run();
 }

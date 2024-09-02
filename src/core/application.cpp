@@ -40,7 +40,7 @@ int Application::run()
 	{
 		return EXIT_FAILURE;
 	}
-	mEngine = std::make_unique<Engine::Engine>(mWindow);
+	mEngine = std::make_unique<Core::Engine::Engine>(mWindow);
 	return mEngine->run();
 }
 

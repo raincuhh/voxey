@@ -25,7 +25,7 @@ private:
 	GLFWwindow* mWindow;
 
 	std::unique_ptr<Logger> mLogger;
-	std::unique_ptr<Engine::Engine> mEngine;
+	std::unique_ptr<Voxey::Core::Engine> mEngine;
 	std::unique_ptr<InputManager> mInputManager;
 
 	int createWindow();

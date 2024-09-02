@@ -46,6 +46,5 @@ namespace voxey::rendering
 		void setupMesh();
 		void setupTexture();
 		void setupModelMatrix();
-		glm::vec3 inferBlockType(BlockTypes type);
 	};
 }

@@ -1,22 +1,28 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include "block.h"
 #include "chunkManager.h"
 
-
-class Chunk
+namespace voxey::rendering
 {
-public:
-	Chunk();
-	~Chunk();
-	
-	void buildChunk();
-	void renderChunk();
+	class Chunk
+	{
+	public:
+		Chunk();
+		~Chunk();
 
-private:
-	int chunkSize = 16;
-	std::vector<voxey::rendering::Block> blocks;
-};
+		//void buildChunkMesh();
+		//void renderChunk();
+		//void getBlock(int x, int y, int z);
+
+	private:
+		int chunkSize = 16;
+		int blockSize = chunkSize / chunkSize;
+		//std::vector<voxey::rendering::Block> blocks;
+	};
+}
+

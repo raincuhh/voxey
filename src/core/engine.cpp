@@ -16,7 +16,10 @@ voxey::core::Engine::~Engine()
 int voxey::core::Engine::run()
 {
     glfwSwapInterval(1);
+
+    glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEPTH_TEST);
+
     glFrontFace(GL_CCW);
     glCullFace(GL_CW);
 

@@ -12,7 +12,9 @@
 #include "../../include/glm/glm.hpp"
 #include "../utils/fileManager.h"
 #include "shaderManager.h"
-#include "block.h"
+
+#include "chunkManager.h"
+#include "camera.h"
 
 
 namespace voxey::rendering
@@ -34,13 +36,17 @@ namespace voxey::rendering
 
 	private:
 		GLFWwindow* mWindow;
+
+		std::unique_ptr<voxey::rendering::ChunkManager> mChunkManager;
+		std::unique_ptr<voxey::rendering::Camera> mCamera;
 		voxey::rendering::ShaderManager* mShaderManager;
+
 		GLuint mShaderProgram;
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjMatrix;
 
 		std::vector<unsigned int> compiledShaderList;
-		std::vector<Block> blockList;
+		//std::vector<Block> blockList;
 
 		void setupShaderProgram();
 

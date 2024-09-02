@@ -74,7 +74,6 @@ const unsigned int indices[] = {
 voxey::rendering::Block::Block(BlockTypes type)
 {
 	setType(type);
-	fragColorValue = inferBlockType(type);
 
 	setupMesh();
 	setupTexture();
@@ -150,33 +149,4 @@ void voxey::rendering::Block::setupModelMatrix()
 {
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	//modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 5.0f));
-}
-
-
-glm::vec3 voxey::rendering::Block::inferBlockType(BlockTypes type)
-{
-	switch (type)
-	{
-	case BLOCK_TYPE_AIR:
-		return glm::vec3(0.0f, 0.0f, 0.0f);
-		break;
-	case BLOCK_TYPE_GRASS:
-		return glm::vec3(0.0f, 2.0f, 0.0f);
-		break;
-	case BLOCK_TYPE_DIRT:
-		return glm::vec3(0.5f, 0.35f, 0.05f);
-		break;
-	case BLOCK_TYPE_STONE:
-		return glm::vec3(0.7f, 0.7f, 0.7f);
-		break;
-	//case BLOCK_TYPE_SAND:
-	//	return glm::vec3();
-	//	break;
-	//case BLOCK_TYPE_WOOD:
-	//	return glm::vec3();
-	//	break;
-	default:
-		return glm::vec3(0.0f, 0.0f, 0.0f);
-		break;
-	}
 }

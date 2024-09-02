@@ -1,6 +1,6 @@
 #include "engine.h"
 
-Voxey::Core::Engine(GLFWwindow* window) :
+Engine::Engine::Engine(GLFWwindow* window) : 
     mWindow(window), 
     mTime(nullptr),
     mRenderingEngine(nullptr), 
@@ -8,11 +8,11 @@ Voxey::Core::Engine(GLFWwindow* window) :
 {
 }
 
-Voxey::Core::Engine::~Engine()
+Engine::Engine::~Engine()
 {
 }
 
-int Voxey::Core::Engine::run()
+int Engine::Engine::run()
 {
     GraphicsManager::bufferSwapInterval(1);
     GraphicsManager::enableDepthTest();
@@ -33,7 +33,7 @@ int Voxey::Core::Engine::run()
     return EXIT_SUCCESS;
 }
 
-void Voxey::Core::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
+void Engine::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
 {
     if (mTime != nullptr)
     {

@@ -1,21 +1,21 @@
-#include "inputManager.h"
+#include "input.h"
 
-std::map<Key, std::function<void()>> InputManager::inputMap;
+std::map<Key, std::function<void()>> voxey::input::Input::inputMap;
 
-void InputManager::init(GLFWwindow* window, InputManager* instance)
+void voxey::input::Input::init(GLFWwindow* window, Input* instance)
 {
 	glfwSetWindowUserPointer(window, instance);
 	glfwSetKeyCallback(window, windowKeyCallback);
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_FALSE);
 }
 
-void InputManager::registerKeybind(const std::function<void()>& callback, Key key)
+void voxey::input::Input::registerKeybind(const std::function<void()>& callback, Key key)
 {
 	inputMap[key] = callback;
     std::cout << "registered keybind: " << static_cast<int>(key) << std::endl;
 }
 
-void InputManager::keyPressed(Key key)
+void voxey::input::Input::keyPressed(Key key)
 {
     auto pressed = inputMap.find(key);
 
@@ -30,9 +30,9 @@ void InputManager::keyPressed(Key key)
     }
 }
 
-void InputManager::windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void voxey::input::Input::windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	InputManager* instance = static_cast<InputManager*>(glfwGetWindowUserPointer(window));
+    Input* instance = static_cast<Input*>(glfwGetWindowUserPointer(window));
 	if (instance)
 	{
 		instance->handleKeyEvent(key, scancode, action, mods);
@@ -43,7 +43,7 @@ void InputManager::windowKeyCallback(GLFWwindow* window, int key, int scancode, 
 	}
 }
 
-void InputManager::handleKeyEvent(int key, int scancode, int action, int mods)
+void voxey::input::Input::handleKeyEvent(int key, int scancode, int action, int mods)
 {
     // think a better way would be to just glfw get inputkey then keypressed. i guess
 	(void)scancode;

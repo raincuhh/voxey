@@ -87,11 +87,11 @@ Rendering::Block::~Block()
 
 void Rendering::Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 {
-	GraphicsManager::bindTexture(GL_TEXTURE_2D, mTexture);
-	GraphicsManager::bindVertexArray(mVAO);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
+	glBindVertexArray(mVAO);
 
-	GraphicsManager::drawElements(GL_TRIANGLES, sizeof(blockVertices), GL_UNSIGNED_INT, 0); // sizeof(blockVertices) / sizeof(unsigned int)
-	GraphicsManager::bindVertexArray(0);
+	glDrawElements(GL_TRIANGLES, sizeof(blockVertices), GL_UNSIGNED_INT, 0); // sizeof(blockVertices) / sizeof(unsigned int)
+	glBindVertexArray(0);
 }
 
 void Rendering::Block::setType(Block::BlockTypes type)
@@ -116,24 +116,25 @@ glm::mat4 Rendering::Block::getModelMatrix() const
 
 void Rendering::Block::setupMesh()
 {
-	GraphicsManager::genVertexArrays(1, &mVAO);
-	GraphicsManager::bindVertexArray(mVAO);
+	glGenVertexArrays(1, &mVAO);
+	glBindVertexArray(mVAO);
 
-	GraphicsManager::genBuffers(1, &mVBO);
-	GraphicsManager::bindBuffer(GL_ARRAY_BUFFER, mVBO);
-	GraphicsManager::bufferData(GL_ARRAY_BUFFER, sizeof(blockVertices), blockVertices, GL_STATIC_DRAW);
+	glGenBuffers(1, &mVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(blockVertices), blockVertices, GL_STATIC_DRAW);
 	
-	GraphicsManager::vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, position));
-	GraphicsManager::enableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, position));
+	glEnableVertexAttribArray(0);
 
-	GraphicsManager::vertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, textureCoords));
-	GraphicsManager::enableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, textureCoords));
+	glEnableVertexAttribArray(1);
 
-	GraphicsManager::genBuffers(1, &mEBO);
-	GraphicsManager::bindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
-	GraphicsManager::bufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	GraphicsManager::bindVertexArray(0);
+	glGenBuffers(1, &mEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
 }
 
 void Rendering::Block::setupTexture()

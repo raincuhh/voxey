@@ -1,13 +1,17 @@
 #pragma once
 
-class Physics
+namespace voxey::physics
 {
-public:
-	Physics();
-	~Physics();
+	class PhysicsEngine
+	{
+	public:
+		PhysicsEngine();
+		~PhysicsEngine();
 
-	void physicsUpdate(double fixedDeltaTime);
+		void physicsUpdate(double fixedDeltaTime);
 
-private:
+	private:
 
-};
+	};
+}
+

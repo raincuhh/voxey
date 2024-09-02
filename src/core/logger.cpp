@@ -1,26 +1,26 @@
 #include "logger.h"
 
-Voxey::Core::Logger::Logger()
+voxey::core::Logger::Logger()
 {
 }
 
-Voxey::Core::Logger::~Logger()
+voxey::core::Logger::~Logger()
 {
 }
 
-void Voxey::Core::Logger::run()
+void voxey::core::Logger::run()
 {
     std::cout << "running logger" << std::endl;
     //TODO: just so i can remember, i changed from mingw to msvc lib to fix it
 	glfwSetErrorCallback(glfwErrorCallback); 
 }
 
-void Voxey::Core::Logger::glfwErrorCallback(int err, const char* desc)
+void voxey::core::Logger::glfwErrorCallback(int err, const char* desc)
 {
-	std::cerr << "GLFW error '" << err << "': " << desc << std::endl;
+	std::cerr << "error glfw '" << err << "': " << desc << std::endl;
 }
 
-void Voxey::Core::Logger::dPrint(const char* name, const char* desc, [[maybe_unused]] const std::vector<std::string>& args)
+void voxey::core::Logger::dPrint(const char* name, const char* desc, [[maybe_unused]] const std::vector<std::string>& args)
 {
     std::string formattedDesc = desc;
 

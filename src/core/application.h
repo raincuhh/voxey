@@ -5,11 +5,14 @@
 
 #include "logger.h"
 #include "engine.h"
-#include "../input/inputManager.h"
-#include "../utils/graphicsManager.h"
+#include "../input/input.h"
+
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
 
 
-namespace Voxey::Core
+
+namespace voxey::core
 {
 	class Application
 	{
@@ -18,7 +21,6 @@ namespace Voxey::Core
 		~Application();
 
 		int run();
-		int init();
 
 		GLFWwindow* getWindow();
 		void escapeApplication();
@@ -26,9 +28,9 @@ namespace Voxey::Core
 	private:
 		GLFWwindow* mWindow;
 
-		std::unique_ptr<Voxey::Core::Logger> mLogger;
-		std::unique_ptr<Voxey::Core::Engine> mEngine;
-		std::unique_ptr<InputManager> mInputManager;
+		std::unique_ptr<voxey::core::Logger> mLogger;
+		std::unique_ptr<voxey::core::Engine> mEngine;
+		std::unique_ptr<voxey::input::Input> mInputManager;
 
 		int createWindow();
 		static void frameBufferCallback(GLFWwindow* window, int width, int height);

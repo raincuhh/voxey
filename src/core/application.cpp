@@ -1,25 +1,25 @@
 #include "application.h"
 
-Voxey::Core::Application::Application(int argc, char** argv[]) : mWindow(nullptr)
+voxey::core::Application::Application(int argc, char** argv[]) : mWindow(nullptr)
 {
 	std::cout << "argc: " << argc << " argv: " << argv << std::endl;
 }
 
-Voxey::Core::Application::~Application()
+voxey::core::Application::~Application()
 {
 	if (mWindow)
 	{
-		GraphicsManager::destroyWindow(mWindow);
+		glfwDestroyWindow(mWindow);
 		mWindow = nullptr;
 	}
-	GraphicsManager::terminateGlfw();
+	glfwTerminate();
 }
 
-int Voxey::Core::Application::run()
+int voxey::core::Application::run()
 {
 	std::cout << "running application" << std::endl;
-
 	char buffer[256];
+
 	if (_getcwd(buffer, sizeof(buffer)) == NULL)
 	{
 		std::cerr << "error getting current working directory" << std::endl;
@@ -30,87 +30,101 @@ int Voxey::Core::Application::run()
 		std::cout << "current working directory: " << buffer << std::endl;
 	}
 
-	if (init() != EXIT_SUCCESS)
+	mLogger = std::make_unique<voxey::core::Logger>();
+	mLogger->run();
+
+	if (!glfwInit())
 	{
+		std::cout << "error init glfw" << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	if (createWindow() != EXIT_SUCCESS)
 	{
+		std::cout << "error init glfw window" << std::endl;
 		return EXIT_FAILURE;
 	}
-	mEngine = std::make_unique<Core::Engine>(mWindow);
+
+	mEngine = std::make_unique<voxey::core::Engine>(mWindow);
 	return mEngine->run();
 }
 
-int Voxey::Core::Application::init()
-{
-	return GraphicsManager::glfwInit();
-}
-
-GLFWwindow* Voxey::Core::Application::getWindow()
+GLFWwindow* voxey::core::Application::getWindow()
 {
 	return mWindow;
 }
 
-int Voxey::Core::Application::createWindow()
+int voxey::core::Application::createWindow()
 {
-	GraphicsManager::windowHintInit();
+	glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	const auto primaryMonitor = GraphicsManager::getPrimaryMonitor();
-	const auto primaryMonitorVideoMode = GraphicsManager::getVideoMode(primaryMonitor);
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+	const auto primaryMonitor = glfwGetPrimaryMonitor();
+	const auto primaryMonitorVideoMode = glfwGetVideoMode(primaryMonitor);
 
 	const auto screenWidth = primaryMonitorVideoMode->width;
 	const auto screenHeight = primaryMonitorVideoMode->height;
 
-	const char* title = "Voxey";
+	const char* title = "voxey";
 	unsigned int windowWidth = 1280;
 	unsigned int windowHeight = 720;
 
-	mWindow = GraphicsManager::createWindow(windowWidth, windowHeight, title, nullptr, nullptr);
-	
+	mWindow = glfwCreateWindow(windowWidth, windowHeight, title, nullptr, nullptr);
 	if (!mWindow)
 	{
 		return EXIT_FAILURE;
 	}
 
-	GraphicsManager::setWindowPos(mWindow, screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);
-	GraphicsManager::setCurrentContext(mWindow);
-	GraphicsManager::setFrameBufferCallback(mWindow, frameBufferCallback);
+	glfwSetWindowPos(mWindow, screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);
+	glfwMakeContextCurrent(mWindow);
+	glfwSetFramebufferSizeCallback(mWindow, frameBufferCallback);
 
-	mInputManager = std::make_unique<InputManager>();
+	mInputManager = std::make_unique<voxey::input::Input>();
 	mInputManager->init(mWindow, mInputManager.get());
 
-	GraphicsManager::gladInit();
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "error init glad";
+		return EXIT_FAILURE;
+	}
 
 	setupDefaultKeybinds();
 	return EXIT_SUCCESS;
 }
 
-void Voxey::Core::Application::frameBufferCallback(GLFWwindow* window, int width, int height)
+void voxey::core::Application::frameBufferCallback(GLFWwindow* window, int width, int height)
 {
 	(void)window;
 	glViewport(0, 0, width, height);
 }
 
-void Voxey::Core::Application::setupDefaultKeybinds()
+void voxey::core::Application::setupDefaultKeybinds()
 {
-	InputManager::registerKeybind(Application::changeGLPolygonMode, Key::T);
-	InputManager::registerKeybind([this]() { this->escapeApplication(); }, Key::ESCAPE);
+	voxey::input::Input::registerKeybind(Application::changeGLPolygonMode, Key::T);
+	voxey::input::Input::registerKeybind([this]() { this->escapeApplication(); }, Key::ESCAPE);
 }
 
-void Voxey::Core::Application::setupDebugKeybinds()
+void voxey::core::Application::setupDebugKeybinds()
 {
 }
 
-void Voxey::Core::Application::changeGLPolygonMode()
+void voxey::core::Application::changeGLPolygonMode()
 {
-	std::cout << "type shi" << std::endl;
 	GLint currentPolygonMode[2];
 	glGetIntegerv(GL_POLYGON_MODE, currentPolygonMode);
 
-	//GLenum newMode = (currentPolygonMode[0] == GL_LINES) ? GL_FILL : GL_LINES;
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
+	GLenum newMode = (currentPolygonMode[0] == GL_LINES) ? GL_FILL : GL_LINES;
+	glPolygonMode(GL_FRONT_AND_BACK, newMode);
 
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR) {
@@ -118,7 +132,7 @@ void Voxey::Core::Application::changeGLPolygonMode()
 	}
 }
 
-void Voxey::Core::Application::escapeApplication()
+void voxey::core::Application::escapeApplication()
 {
 	glfwSetWindowShouldClose(getWindow(), GL_TRUE);
 }

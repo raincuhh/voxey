@@ -1,32 +1,32 @@
 #include "time.h"
 
-double Utils::Time::deltaTime;
-double Utils::Time::fixedDeltaTime;
-double Utils::Time::previousTime;
+double voxey::utils::Time::deltaTime;
+double voxey::utils::Time::fixedDeltaTime;
+double voxey::utils::Time::previousTime;
 
-Utils::Time::Time()
+voxey::utils::Time::Time()
 {
 	fixedDeltaTime = 1.0 / 60.0;
-	previousTime = GraphicsManager::getTime();
+	previousTime = glfwGetTime();
 }
 
-Utils::Time::~Time()
+voxey::utils::Time::~Time()
 {
 }
 
-void Utils::Time::timeUpdate()
+void voxey::utils::Time::timeUpdate()
 {
-	double currentTime = GraphicsManager::getTime();
+	double currentTime = glfwGetTime();
 	deltaTime = static_cast<double>(currentTime - previousTime);
 	previousTime = currentTime;
 }
 
-double Utils::Time::getDeltaTime()
+double voxey::utils::Time::getDeltaTime()
 {
 	return deltaTime;
 }
 
-double Utils::Time::getFixedDeltaTime()
+double voxey::utils::Time::getFixedDeltaTime()
 {
 	return fixedDeltaTime;
 }

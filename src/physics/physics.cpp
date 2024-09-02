@@ -1,13 +1,13 @@
 #include "physics.h"
 
-Physics::Physics()
+voxey::physics::PhysicsEngine::PhysicsEngine()
 {
 }
 
-Physics::~Physics()
+voxey::physics::PhysicsEngine::~PhysicsEngine()
 {
 }
 
-void Physics::physicsUpdate(double fixedDeltaTime)
+void voxey::physics::PhysicsEngine::physicsUpdate(double fixedDeltaTime)
 {
 }

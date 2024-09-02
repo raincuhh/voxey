@@ -17,6 +17,12 @@ Rendering::Renderer::~Renderer()
 	{
 		glDeleteShader(shader);
 	}
+	
+	if (mShaderManager)
+	{
+		delete mShaderManager;
+		mShaderManager = nullptr;
+	}
 }
 
 void Rendering::Renderer::init()
@@ -36,7 +42,7 @@ void Rendering::Renderer::init()
 		}
 	}
 
-	mShaderManager = new Utils::ShaderManager();
+	mShaderManager = new voxey::rendering::ShaderManager();
 
 	setupShaderProgram();
 	if (mShaderProgram == 0)
@@ -103,16 +109,15 @@ void Rendering::Renderer::setupShaderProgram()
 		{"shaders/fragmentShader.frag", GL_FRAGMENT_SHADER}
 		//
 	};
-
 	mShaderProgram = mShaderManager->createProgram(shaders);
 }
 
 void Rendering::Renderer::updateShaderProjMatrix() const
 {
-	Utils::ShaderManager::setUniformMat4fv(mShaderProgram, "projMatrix", mProjMatrix);
+	voxey::rendering::ShaderManager::setUniformMat4fv(mShaderProgram, "projMatrix", mProjMatrix);
 }
 
 void Rendering::Renderer::updateShaderViewMatrix() const
 {
-	Utils::ShaderManager::setUniformMat4fv(mShaderProgram, "viewMatrix", mViewMatrix);
+	voxey::rendering::ShaderManager::setUniformMat4fv(mShaderProgram, "viewMatrix", mViewMatrix);
 }

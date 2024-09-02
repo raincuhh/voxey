@@ -8,9 +8,9 @@
 #include "../../include/GLFW/glfw3.h"
 #include "../../include/glm/glm.hpp"
 #include "../../include/glm/gtc/type_ptr.hpp"
-#include "fileManager.h"
+#include "../utils/fileManager.h"
 
-namespace Utils 
+namespace voxey::rendering 
 {
 	class ShaderManager
 	{

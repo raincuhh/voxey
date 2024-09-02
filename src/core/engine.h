@@ -10,7 +10,7 @@
 #include "../utils/time.h"
 #include "../debug/fps.h"
 
-namespace Voxey::Core 
+namespace voxey::core
 {
 	class Engine
 	{
@@ -23,8 +23,8 @@ namespace Voxey::Core
 	private:
 		GLFWwindow* mWindow;
 
-		std::unique_ptr<Utils::Time> mTime;
+		std::unique_ptr<voxey::utils::Time> mTime;
 		std::unique_ptr<Rendering::Renderer> mRenderingEngine;
-		std::unique_ptr<Physics> mPhysicsEngine;
+		std::unique_ptr<voxey::physics::PhysicsEngine> mPhysicsEngine;
 	};
 }

@@ -9,7 +9,7 @@
 
 #include "../utils/graphicsManager.h"
 #include "../../include/glm/glm.hpp"
-#include "../utils/shaderManager.h"
+#include "shaderManager.h"
 #include "../utils/fileManager.h"
 #include "block.h"
 
@@ -32,7 +32,7 @@ namespace Rendering {
 
 	private:
 		GLFWwindow* mWindow;
-		Utils::ShaderManager* mShaderManager;
+		voxey::rendering::ShaderManager* mShaderManager;
 		GLuint mShaderProgram;
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjMatrix;

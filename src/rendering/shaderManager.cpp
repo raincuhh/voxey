@@ -1,11 +1,11 @@
 #include "shaderManager.h"
 
-Utils::ShaderManager::~ShaderManager()
+voxey::rendering::ShaderManager::~ShaderManager()
 {
 	deleteAllProgramShaders();
 }
 
-GLuint Utils::ShaderManager::createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths)
+GLuint voxey::rendering::ShaderManager::createProgram(const std::vector<std::pair<std::string, GLenum>>& shaderPaths)
 {
 	std::vector<GLuint> shaders;
 
@@ -15,13 +15,13 @@ GLuint Utils::ShaderManager::createProgram(const std::vector<std::pair<std::stri
 		shaders.push_back(shader);
 	}
 
-	GLuint shaderProgram = Utils::ShaderManager::linkProgram(glCreateProgram(), shaders);
+	GLuint shaderProgram = voxey::rendering::ShaderManager::linkProgram(glCreateProgram(), shaders);
 	programShaders[shaderProgram] = shaders;
 
 	return shaderProgram;
 }
 
-GLuint Utils::ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& shaders)
+GLuint voxey::rendering::ShaderManager::linkProgram(GLuint program, const std::vector<GLuint>& shaders)
 {
 	for (GLuint shader : shaders)
 	{
@@ -55,14 +55,14 @@ GLuint Utils::ShaderManager::linkProgram(GLuint program, const std::vector<GLuin
 	return program;
 }
 
-GLuint Utils::ShaderManager::getActiveProgram()
+GLuint voxey::rendering::ShaderManager::getActiveProgram()
 {
 	GLint program;
 	glGetIntegerv(GL_CURRENT_PROGRAM, &program);
 	return static_cast<GLuint>(program);
 }
 
-void Utils::ShaderManager::setUniformMat4fv(GLuint program, const char* name, const glm::mat4& matrix)
+void voxey::rendering::ShaderManager::setUniformMat4fv(GLuint program, const char* name, const glm::mat4& matrix)
 {
 	glUseProgram(program);
 	int location = glGetUniformLocation(program, name);
@@ -77,7 +77,7 @@ void Utils::ShaderManager::setUniformMat4fv(GLuint program, const char* name, co
 	}
 }
 
-GLuint Utils::ShaderManager::createShader(const char* path, GLenum type)
+GLuint voxey::rendering::ShaderManager::createShader(const char* path, GLenum type)
 {
 	std::string source = Utils::FileManager::readFile(path);
 	const char* parsedSource = source.data();
@@ -86,7 +86,7 @@ GLuint Utils::ShaderManager::createShader(const char* path, GLenum type)
 	return shader;
 }
 
-GLuint Utils::ShaderManager::compileShader(const char* source, GLenum type)
+GLuint voxey::rendering::ShaderManager::compileShader(const char* source, GLenum type)
 {
 	GLuint shader = glCreateShader(type);
 	glShaderSource(shader, 1, &source, NULL);
@@ -100,7 +100,7 @@ GLuint Utils::ShaderManager::compileShader(const char* source, GLenum type)
 	return shader;
 }
 
-GLint Utils::ShaderManager::debugShader(GLuint shader) const
+GLint voxey::rendering::ShaderManager::debugShader(GLuint shader) const
 {
 	GLint compiled = 0;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
@@ -118,7 +118,7 @@ GLint Utils::ShaderManager::debugShader(GLuint shader) const
 	return EXIT_SUCCESS;
 }
 
-GLint Utils::ShaderManager::debugProgram(GLuint program) const
+GLint voxey::rendering::ShaderManager::debugProgram(GLuint program) const
 {
 	GLint shaderLinked = 0;
 	glGetProgramiv(program, GL_LINK_STATUS, &shaderLinked);
@@ -137,9 +137,9 @@ GLint Utils::ShaderManager::debugProgram(GLuint program) const
 	return EXIT_SUCCESS;
 }
 
-void Utils::ShaderManager::deleteShadersFromActiveProgram()
+void voxey::rendering::ShaderManager::deleteShadersFromActiveProgram()
 {
-	GLuint activeProgram = Utils::ShaderManager::getActiveProgram();
+	GLuint activeProgram = voxey::rendering::ShaderManager::getActiveProgram();
 
 	if (programShaders.find(activeProgram) != programShaders.end())
 	{
@@ -156,7 +156,7 @@ void Utils::ShaderManager::deleteShadersFromActiveProgram()
 	}
 }
 
-void Utils::ShaderManager::deleteAllProgramShaders()
+void voxey::rendering::ShaderManager::deleteAllProgramShaders()
 {
 	for (auto& entry : programShaders) 
 	{

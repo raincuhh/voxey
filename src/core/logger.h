@@ -9,7 +9,7 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
-namespace Voxey::Core
+namespace voxey::core
 {
 	class Logger
 	{

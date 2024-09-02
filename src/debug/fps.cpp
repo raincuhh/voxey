@@ -1,12 +1,12 @@
 #include "fps.h"
 
-Debug::Fps::Fps() : frames(0), previousSecond(GraphicsManager::getTime())
+Debug::Fps::Fps() : frames(0), previousSecond(glfwGetTime())
 {
 }
 
 void Debug::Fps::fpsUpdate()
 {
-	double fpsCurrent = GraphicsManager::getTime();
+	double fpsCurrent = glfwGetTime();
 	frames++;
 
 	if (fpsCurrent - previousSecond >= 1.0)

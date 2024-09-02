@@ -1,27 +1,28 @@
 #include "engine.h"
 
-Voxey::Core::Engine::Engine(GLFWwindow* window) :
+voxey::core::Engine::Engine(GLFWwindow* window) :
     mWindow(window), 
     mTime(nullptr),
-    mRenderingEngine(nullptr), 
+    mRenderingEngine(nullptr),
     mPhysicsEngine(nullptr)
 {
 }
 
-Voxey::Core::Engine::~Engine()
+voxey::core::Engine::~Engine()
 {
 }
 
-int Voxey::Core::Engine::run()
+int voxey::core::Engine::run()
 {
-    GraphicsManager::bufferSwapInterval(1);
-    GraphicsManager::enableDepthTest();
-    GraphicsManager::setFrontFace(GL_CCW);
-    GraphicsManager::setCullFace(GL_CW);
+    glfwSwapInterval(1);
 
-    mTime = std::make_unique<Utils::Time>();
+    glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_CW);
+
+    mTime = std::make_unique<voxey::utils::Time>();
     mRenderingEngine = std::make_unique<Rendering::Renderer>(mWindow);
-    mPhysicsEngine = std::make_unique<Physics>();
+    mPhysicsEngine = std::make_unique<voxey::physics::PhysicsEngine>();
 
     double timeAccu = 0.0;
     const double fixedDeltaTime = mTime->getFixedDeltaTime();
@@ -33,7 +34,7 @@ int Voxey::Core::Engine::run()
     return EXIT_SUCCESS;
 }
 
-void Voxey::Core::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
+void voxey::core::Engine::engineUpdate(double timeAccu, const double fixedDeltaTime)
 {
     if (mTime != nullptr)
     {
@@ -60,8 +61,8 @@ void Voxey::Core::Engine::engineUpdate(double timeAccu, const double fixedDeltaT
         mRenderingEngine->renderUpdate(deltaTime);
     }
 
-    GraphicsManager::swapBuffers(mWindow);
-    GraphicsManager::pollEvents();
+    glfwSwapBuffers(mWindow);
+    glfwPollEvents();
 }
 
 

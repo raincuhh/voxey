@@ -25,16 +25,23 @@ enum class Key {
 };
 
 
-class InputManager
+namespace voxey::input
 {
-public:
-	static void init(GLFWwindow* window, InputManager* instance);
-	static void registerKeybind(const std::function<void()>& callback, Key key);
+    class Input
+    {
+    public:
+        static void init(GLFWwindow* window, Input* instance);
+        static void registerKeybind(const std::function<void()>& callback, Key key);
 
-private:
-	static std::map<Key, std::function<void()>> inputMap;
+    private:
+        static std::map<Key, std::function<void()>> inputMap;
 
-	static void keyPressed(Key key);
-	static void windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	static void handleKeyEvent(int key, int scancode, int action, int mods);
-};
+        static void keyPressed(Key key);
+        static void windowKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        static void handleKeyEvent(int key, int scancode, int action, int mods);
+    };
+}
+
+
+
+

@@ -1,11 +1,10 @@
 #pragma once
 
 #include <iostream>
-//#include <chrono>
 
 #include "graphicsManager.h"
 
-namespace Utils
+namespace voxey::utils
 {
 	class Time
 	{

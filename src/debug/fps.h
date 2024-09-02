@@ -1,10 +1,11 @@
 #pragma once 
 
 #include <iostream>
-#include "../utils/graphicsManager.h"
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
 
 
-namespace Debug
+namespace voxey::debug
 {
 	class Fps
 	{

@@ -7,19 +7,21 @@
 #include <vector>
 #include <memory>
 
-#include "../utils/graphicsManager.h"
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
 #include "../../include/glm/glm.hpp"
-#include "shaderManager.h"
 #include "../utils/fileManager.h"
+#include "shaderManager.h"
 #include "block.h"
 
 
-namespace Rendering {
-	class Renderer
+namespace voxey::rendering
+{
+	class RenderingEngine
 	{
 	public:
-		Renderer(GLFWwindow* window);
-		~Renderer();
+		RenderingEngine(GLFWwindow* window);
+		~RenderingEngine();
 
 		void init();
 		void renderUpdate(double dt) const;

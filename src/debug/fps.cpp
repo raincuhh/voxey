@@ -1,17 +1,19 @@
 #include "fps.h"
 
-Debug::Fps::Fps() : frames(0), previousSecond(glfwGetTime())
+voxey::debug::Fps::Fps() : 
+	frames(0), 
+	previousSecond(glfwGetTime())
 {
 }
 
-void Debug::Fps::fpsUpdate()
+void voxey::debug::Fps::fpsUpdate()
 {
 	double fpsCurrent = glfwGetTime();
 	frames++;
 
 	if (fpsCurrent - previousSecond >= 1.0)
 	{
-		std::printf("%f ms/frames\n", 1000.0 / double(frames));
+		std::cout << frames << std::endl;
 		frames = 0;
 		previousSecond += 1.0;
 	}

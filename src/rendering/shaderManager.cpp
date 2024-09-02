@@ -79,7 +79,7 @@ void voxey::rendering::ShaderManager::setUniformMat4fv(GLuint program, const cha
 
 GLuint voxey::rendering::ShaderManager::createShader(const char* path, GLenum type)
 {
-	std::string source = Utils::FileManager::readFile(path);
+	std::string source = voxey::utils::FileManager::readFile(path);
 	const char* parsedSource = source.data();
 
 	GLuint shader = compileShader(parsedSource, type);

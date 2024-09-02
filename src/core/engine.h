@@ -4,9 +4,12 @@
 #include <memory>
 #include <chrono>
 
-#include "../utils/graphicsManager.h"
-#include "../rendering/renderer.h"
-#include "../physics/physics.h"
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
+
+#include "../rendering/renderingEngine.h"
+#include "../physics/physicsEngine.h"
+
 #include "../utils/time.h"
 #include "../debug/fps.h"
 
@@ -23,8 +26,9 @@ namespace voxey::core
 	private:
 		GLFWwindow* mWindow;
 
+		std::unique_ptr <voxey::debug::Fps> mFps;
 		std::unique_ptr<voxey::utils::Time> mTime;
-		std::unique_ptr<Rendering::Renderer> mRenderingEngine;
+		std::unique_ptr<voxey::rendering::RenderingEngine> mRenderingEngine;
 		std::unique_ptr<voxey::physics::PhysicsEngine> mPhysicsEngine;
 	};
 }

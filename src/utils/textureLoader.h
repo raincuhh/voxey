@@ -3,11 +3,12 @@
 #include <iostream>
 #include <string>
 
-#include "graphicsManager.h"
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
 
 #include "../../include/stb-master/stb_image.h"
 
-namespace Utils
+namespace voxey::utils
 {
 	class TextureLoader
 	{

@@ -15,7 +15,7 @@ include_directories(
 )
 
 set(SOURCES
-"src/core/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/input.h" "src/input/input.cpp" "src/rendering/renderer.h" "src/rendering/renderer.cpp" "src/utils/fileManager.h" "src/utils/fileManager.cpp" "src/rendering/block.h" "src/rendering/block.cpp" "src/utils/textureLoader.h" "src/utils/textureLoader.cpp" "src/rendering/shaderManager.h" "src/rendering/shaderManager.cpp" "src/rendering/chunk.h" "src/rendering/chunk.cpp" "src/rendering/chunkManager.h" "src/rendering/chunkManager.cpp" "src/rendering/camera.h" "src/rendering/camera.cpp" "src/physics/physics.h" "src/physics/physics.cpp" "src/debug/fps.h" "src/debug/fps.cpp" "src/utils/graphicsManager.h" "src/utils/graphicsManager.cpp")
+"src/core/main.cpp" "src/ext/glad.c" "src/core/application.h" "src/core/application.cpp" "src/core/logger.h" "src/core/logger.cpp" "src/core/engine.h" "src/core/engine.cpp" "src/utils/time.h" "src/utils/time.cpp" "src/input/input.h" "src/input/input.cpp" "src/rendering/renderingEngine.h" "src/rendering/renderingEngine.cpp" "src/utils/fileManager.h" "src/utils/fileManager.cpp" "src/rendering/block.h" "src/rendering/block.cpp" "src/utils/textureLoader.h" "src/utils/textureLoader.cpp" "src/rendering/shaderManager.h" "src/rendering/shaderManager.cpp" "src/rendering/chunk.h" "src/rendering/chunk.cpp" "src/rendering/chunkManager.h" "src/rendering/chunkManager.cpp" "src/rendering/camera.h" "src/rendering/camera.cpp" "src/physics/physicsEngine.h" "src/physics/physicsEngine.cpp" "src/debug/fps.h" "src/debug/fps.cpp"  )
 
 add_executable (voxey ${SOURCES} )
 

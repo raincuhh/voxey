@@ -2,7 +2,9 @@
 
 #include <iostream>
 
-#include "graphicsManager.h"
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
+
 
 namespace voxey::utils
 {

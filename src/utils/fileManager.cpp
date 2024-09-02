@@ -1,6 +1,7 @@
 #include "fileManager.h"
 
-std::string Utils::FileManager::readFile(const char* filePath, bool debug)
+
+std::string voxey::utils::FileManager::readFile(const char* filePath, bool debug)
 {
 	std::string content = "";
 	std::ifstream file(filePath);

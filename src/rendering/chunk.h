@@ -3,9 +3,9 @@
 #include <iostream>
 #include <vector>
 
-
 #include "block.h"
 #include "chunkManager.h"
+
 
 class Chunk
 {
@@ -18,5 +18,5 @@ public:
 
 private:
 	int chunkSize = 16;
-	std::vector<Rendering::Block> blocks;
+	std::vector<voxey::rendering::Block> blocks;
 };

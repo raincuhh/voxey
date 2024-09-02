@@ -5,11 +5,12 @@
 #include "../../include/glm/glm.hpp"
 #include <../../include/glm/gtc/matrix_transform.hpp>
 #include <../../include/glm/gtc/type_ptr.hpp>
-#include "../utils/graphicsManager.h"
+#include "../../include/glad/glad.h"
+#include "../../include/GLFW/glfw3.h"
 #include "../utils/textureLoader.h"
 
 
-namespace Rendering
+namespace voxey::rendering
 {
 	class Block
 	{

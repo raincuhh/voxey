@@ -71,7 +71,7 @@ const unsigned int indices[] = {
 	21, 22, 23, // triangle2
 };
 
-Rendering::Block::Block(BlockTypes type)
+voxey::rendering::Block::Block(BlockTypes type)
 {
 	setType(type);
 	fragColorValue = inferBlockType(type);
@@ -81,11 +81,11 @@ Rendering::Block::Block(BlockTypes type)
 	setupModelMatrix();
 }
 
-Rendering::Block::~Block()
+voxey::rendering::Block::~Block()
 {
 }
 
-void Rendering::Block::draw([[maybe_unused]] unsigned int shaderProgram) const
+void voxey::rendering::Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 {
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 	glBindVertexArray(mVAO);
@@ -94,27 +94,27 @@ void Rendering::Block::draw([[maybe_unused]] unsigned int shaderProgram) const
 	glBindVertexArray(0);
 }
 
-void Rendering::Block::setType(Block::BlockTypes type)
+void voxey::rendering::Block::setType(Block::BlockTypes type)
 {
 	mBlockType = type;
 }
 
-Rendering::Block::BlockTypes Rendering::Block::getType() const
+voxey::rendering::Block::BlockTypes voxey::rendering::Block::getType() const
 {
 	return mBlockType;
 }
 
-void Rendering::Block::translateModelMatrix(glm::vec3 translate)
+void voxey::rendering::Block::translateModelMatrix(glm::vec3 translate)
 {
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(translate.x, translate.y, translate.z));
 }
 
-glm::mat4 Rendering::Block::getModelMatrix() const
+glm::mat4 voxey::rendering::Block::getModelMatrix() const
 {
 	return modelMatrix;
 }
 
-void Rendering::Block::setupMesh()
+void voxey::rendering::Block::setupMesh()
 {
 	glGenVertexArrays(1, &mVAO);
 	glBindVertexArray(mVAO);
@@ -137,23 +137,23 @@ void Rendering::Block::setupMesh()
 	glBindVertexArray(0);
 }
 
-void Rendering::Block::setupTexture()
+void voxey::rendering::Block::setupTexture()
 {
-	int success = Utils::TextureLoader::LoadTexture("assets/testing/placeholder.png", mTexture);
+	int success = voxey::utils::TextureLoader::LoadTexture("assets/testing/placeholder.png", mTexture);
 	if (success != 1)
 	{
 		std::cerr << "error loading texture" << std::endl;
 	}
 }
 
-void Rendering::Block::setupModelMatrix()
+void voxey::rendering::Block::setupModelMatrix()
 {
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	//modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 0.0f, 5.0f));
 }
 
 
-glm::vec3 Rendering::Block::inferBlockType(BlockTypes type)
+glm::vec3 voxey::rendering::Block::inferBlockType(BlockTypes type)
 {
 	switch (type)
 	{

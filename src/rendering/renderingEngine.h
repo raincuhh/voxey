@@ -39,13 +39,13 @@ namespace voxey::rendering
 
 		std::unique_ptr<voxey::rendering::ChunkManager> mChunkManager;
 		std::unique_ptr<voxey::rendering::Camera> mCamera;
-		voxey::rendering::ShaderManager* mShaderManager;
 
+		voxey::rendering::ShaderManager* mShaderManager;
 		GLuint mShaderProgram;
+
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjMatrix;
 
-		std::vector<unsigned int> compiledShaderList;
 		//std::vector<Block> blockList;
 
 		void setupShaderProgram();

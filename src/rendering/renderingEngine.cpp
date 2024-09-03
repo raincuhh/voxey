@@ -7,21 +7,17 @@ voxey::rendering::RenderingEngine::RenderingEngine(GLFWwindow* window) :
 	mShaderManager(nullptr),
 	mShaderProgram(0),
 	mViewMatrix(glm::mat4(1.0f)),
-	mProjMatrix(glm::mat4(1.0f)),
-	compiledShaderList(0)
+	mProjMatrix(glm::mat4(1.0f))
 {
 	init();
 }
 
 voxey::rendering::RenderingEngine::~RenderingEngine()
 {
-	for (unsigned int shader : compiledShaderList)
-	{
-		glDeleteShader(shader);
-	}
 	
 	if (mShaderManager)
 	{
+		mShaderManager->deleteShadersFromProgram(mShaderProgram);
 		delete mShaderManager;
 		mShaderManager = nullptr;
 	}
@@ -66,7 +62,7 @@ void voxey::rendering::RenderingEngine::init()
 	glfwGetWindowSize(mWindow, &width, &height);
 	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
 
-	setViewMatrix(glm::translate(mViewMatrix, glm::vec3(-5.0f, -10.0f, -30.0f)));
+	setViewMatrix(glm::translate(getViewMatrix(), glm::vec3(-5.0f, -10.0f, -30.0f)));
 	setProjMatrix(glm::perspective(fov, aspectRatio, 0.1f, 100.0f));
 }
 
@@ -76,8 +72,6 @@ void voxey::rendering::RenderingEngine::renderUpdate(double deltaTime) const
 	glUseProgram(mShaderProgram);
 
 	updateShaderViewMatrix();
-
-
 
 	mChunkManager->chunkListsUpdate(deltaTime);
 	mCamera->cameraInputUpdate(deltaTime);

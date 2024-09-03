@@ -23,6 +23,7 @@ namespace voxey::rendering
 
 		static void setUniformMat4fv(GLuint program, const char* name, const glm::mat4& matrix);
 		//
+		void deleteShadersFromProgram(GLuint program);
 
 	private:
 		GLuint createShader(const char* path, GLenum type);

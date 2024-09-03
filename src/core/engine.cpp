@@ -58,6 +58,10 @@ void voxey::core::Engine::engineUpdate(double timeAccu, const double fixedDeltaT
 
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
+
+    if (voxey::input::Input::isActionPressed("ESC")) {
+        glfwSetWindowShouldClose(mWindow, GL_TRUE);
+    }
 }
 
 

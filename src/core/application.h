@@ -23,7 +23,6 @@ namespace voxey::core
 		int run();
 
 		GLFWwindow* getWindow();
-		void escapeApplication();
 
 	private:
 		GLFWwindow* mWindow;

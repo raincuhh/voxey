@@ -11,6 +11,7 @@
 #include "../physics/physicsEngine.h"
 
 #include "../utils/time.h"
+#include "../input/input.h"
 #include "../debug/fps.h"
 
 namespace voxey::core

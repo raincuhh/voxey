@@ -45,7 +45,7 @@ int voxey::core::Application::run()
 		return EXIT_FAILURE;
 	}
 
-	mEngine = std::make_unique<voxey::core::Engine>(mWindow);
+	mEngine = std::make_unique<voxey::core::Engine>(getWindow());
 	return mEngine->run();
 }
 
@@ -59,6 +59,7 @@ int voxey::core::Application::createWindow()
 	glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -110,8 +111,8 @@ void voxey::core::Application::frameBufferCallback(GLFWwindow* window, int width
 
 void voxey::core::Application::setupDefaultKeybinds()
 {
-	voxey::input::Input::registerKeybind(Application::changeGLPolygonMode, Key::T);
-	voxey::input::Input::registerKeybind([this]() { this->escapeApplication(); }, Key::ESCAPE);
+	voxey::input::Input::registerAction("ESC", GLFW_KEY_ESCAPE);
+	voxey::input::Input::registerAction("T", GLFW_KEY_T);
 }
 
 void voxey::core::Application::setupDebugKeybinds()
@@ -130,9 +131,4 @@ void voxey::core::Application::changeGLPolygonMode()
 	if (error != GL_NO_ERROR) {
 		std::cerr << "OpenGL Error: " << error << std::endl;
 	}
-}
-
-void voxey::core::Application::escapeApplication()
-{
-	glfwSetWindowShouldClose(getWindow(), GL_TRUE);
 }

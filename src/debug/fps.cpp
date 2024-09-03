@@ -13,7 +13,7 @@ void voxey::debug::Fps::fpsUpdate()
 
 	if (fpsCurrent - previousSecond >= 1.0)
 	{
-		std::cout << frames << std::endl;
+		std::cout << "fps: " << frames << std::endl;
 		frames = 0;
 		previousSecond += 1.0;
 	}

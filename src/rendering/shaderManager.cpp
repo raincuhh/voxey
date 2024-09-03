@@ -77,6 +77,23 @@ void voxey::rendering::ShaderManager::setUniformMat4fv(GLuint program, const cha
 	}
 }
 
+void voxey::rendering::ShaderManager::deleteShadersFromProgram(GLuint program)
+{
+	if (programShaders.find(program) != programShaders.end())
+	{
+		for (GLuint shader : programShaders[program])
+		{
+			glDetachShader(program, shader);
+			glDeleteShader(shader);
+		}
+		programShaders.erase(program);
+	}
+	else
+	{
+		std::cerr << "no shaders found for the shader program given" << std::endl;
+	}
+}
+
 GLuint voxey::rendering::ShaderManager::createShader(const char* path, GLenum type)
 {
 	std::string source = voxey::utils::FileManager::readFile(path);

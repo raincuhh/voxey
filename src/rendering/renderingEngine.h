@@ -26,12 +26,12 @@ namespace voxey::rendering
 		~RenderingEngine();
 
 		void init();
-		void renderUpdate(double dt) const;
+		void renderUpdate(double dt);
 
 		const glm::mat4& getViewMatrix() const;
-		void setViewMatrix(const glm::mat4& viewMatrix);
-
 		const glm::mat4& getProjMatrix() const;
+
+		void setViewMatrix(const glm::mat4& viewMatrix);
 		void setProjMatrix(const glm::mat4& projMatrix);
 
 	private:
@@ -46,7 +46,7 @@ namespace voxey::rendering
 		glm::mat4 mViewMatrix;
 		glm::mat4 mProjMatrix;
 
-		//std::vector<Block> blockList;
+		std::vector<Block> blockList;
 
 		void setupShaderProgram();
 

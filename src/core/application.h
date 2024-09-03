@@ -10,8 +10,6 @@
 #include "../../include/glad/glad.h"
 #include "../../include/GLFW/glfw3.h"
 
-
-
 namespace voxey::core
 {
 	class Application
@@ -31,11 +29,12 @@ namespace voxey::core
 		std::unique_ptr<voxey::core::Engine> mEngine;
 		std::unique_ptr<voxey::input::Input> mInputManager;
 
+		bool debugMode = true;
+
 		int createWindow();
 		static void frameBufferCallback(GLFWwindow* window, int width, int height);
 		void setupDefaultKeybinds();
 		void setupDebugKeybinds();
-		static void changeGLPolygonMode();
 	};
 }
 

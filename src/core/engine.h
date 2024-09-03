@@ -31,5 +31,7 @@ namespace voxey::core
 		std::unique_ptr<voxey::utils::Time> mTime;
 		std::unique_ptr<voxey::rendering::RenderingEngine> mRenderingEngine;
 		std::unique_ptr<voxey::physics::PhysicsEngine> mPhysicsEngine;
+
+		void changePolygonMode();
 	};
 }

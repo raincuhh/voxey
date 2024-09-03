@@ -14,7 +14,6 @@ voxey::rendering::RenderingEngine::RenderingEngine(GLFWwindow* window) :
 
 voxey::rendering::RenderingEngine::~RenderingEngine()
 {
-	
 	if (mShaderManager)
 	{
 		mShaderManager->deleteShadersFromProgram(mShaderProgram);
@@ -25,14 +24,14 @@ voxey::rendering::RenderingEngine::~RenderingEngine()
 
 void voxey::rendering::RenderingEngine::init()
 {
-	/*
-	int blockRenderSize = 16;
+	
+	int chunkSize = 16;
 
-	for (int x = 0; x < 16; x++)
+	for (int x = 0; x < chunkSize; x++)
 	{
-		for (int y = 0; y < 16; y++)
+		for (int y = 0; y < chunkSize; y++)
 		{
-			for (int z = 0; z < 16; z++)
+			for (int z = 0; z < chunkSize; z++)
 			{
 				voxey::rendering::Block block(voxey::rendering::Block::BLOCK_TYPE_GRASS);
 				block.translateModelMatrix(glm::vec3(x, y, z));
@@ -40,44 +39,37 @@ void voxey::rendering::RenderingEngine::init()
 			}
 		}
 	}
-	*/
 
-	mChunkManager = std::make_unique<voxey::rendering::ChunkManager>();
-	mCamera = std::make_unique<voxey::rendering::Camera>();
+	int width, height;
+	glfwGetWindowSize(mWindow, &width, &height);
+
+	mCamera = std::make_unique<voxey::rendering::Camera>(glm::vec3(0.0f, 0.0f, 3.0f), width, height, mWindow);
+
 	mShaderManager = new voxey::rendering::ShaderManager();
-
 	setupShaderProgram();
-
 	if (mShaderProgram == 0)
 	{
 		std::cerr << "error failed shader program setup";
 		return;
 	}
 
-	int width;
-	int height;
-	float aspectRatio;
-	constexpr float fov = glm::radians(45.0f);
+	setProjMatrix(mCamera->getProjMatrix());
 
-	glfwGetWindowSize(mWindow, &width, &height);
-	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-
-	setViewMatrix(glm::translate(getViewMatrix(), glm::vec3(-5.0f, -10.0f, -30.0f)));
-	setProjMatrix(glm::perspective(fov, aspectRatio, 0.1f, 100.0f));
+	mChunkManager = std::make_unique<voxey::rendering::ChunkManager>();
 }
 
-void voxey::rendering::RenderingEngine::renderUpdate(double deltaTime) const
+void voxey::rendering::RenderingEngine::renderUpdate(double deltaTime)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(mShaderProgram);
 
-	updateShaderViewMatrix();
-
 	mChunkManager->chunkListsUpdate(deltaTime);
+
 	mCamera->cameraInputUpdate(deltaTime);
 	mCamera->cameraUpdate(deltaTime);
 
-	/*
+	setViewMatrix(mCamera->getViewMatrix());
+	
 	for (Block block : blockList)
 	{
 		glm::mat4 modelMatrix = block.getModelMatrix();
@@ -85,18 +77,11 @@ void voxey::rendering::RenderingEngine::renderUpdate(double deltaTime) const
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 		block.draw(mShaderProgram);
 	}
-	*/
 }
 
 const glm::mat4& voxey::rendering::RenderingEngine::getViewMatrix() const
 {
 	return mViewMatrix;
-}
-
-void voxey::rendering::RenderingEngine::setViewMatrix(const glm::mat4& viewMatrix)
-{
-	mViewMatrix = viewMatrix;
-	updateShaderViewMatrix();
 }
 
 const glm::mat4& voxey::rendering::RenderingEngine::getProjMatrix() const
@@ -108,6 +93,12 @@ void voxey::rendering::RenderingEngine::setProjMatrix(const glm::mat4& projMatri
 {
 	mProjMatrix = projMatrix;
 	updateShaderProjMatrix();
+}
+
+void voxey::rendering::RenderingEngine::setViewMatrix(const glm::mat4& viewMatrix)
+{
+	mViewMatrix = viewMatrix;
+	updateShaderViewMatrix();
 }
 
 void voxey::rendering::RenderingEngine::setupShaderProgram()

@@ -62,6 +62,26 @@ void voxey::core::Engine::engineUpdate(double timeAccu, const double fixedDeltaT
     if (voxey::input::Input::isActionPressed("ESC")) {
         glfwSetWindowShouldClose(mWindow, GL_TRUE);
     }
+
+    if (voxey::input::Input::isActionPressed("DEBUG_POLYGON_MODE"))
+    {
+        std::cout << "changed polygon mode" << std::endl;
+        changePolygonMode();
+    }
+}
+
+void voxey::core::Engine::changePolygonMode()
+{
+    //GLint currentPolygonMode[2];
+    //glGetIntegerv(GL_POLYGON_MODE, currentPolygonMode);
+
+    //GLenum newMode = (currentPolygonMode[0] == GL_LINES) ? GL_FILL : GL_LINES;
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINES);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL Error: " << error << std::endl;
+    }
 }
 
 

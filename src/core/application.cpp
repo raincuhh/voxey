@@ -100,6 +100,13 @@ int voxey::core::Application::createWindow()
 	}
 
 	setupDefaultKeybinds();
+
+	if (debugMode)
+	{
+		setupDebugKeybinds();
+	}
+
+
 	return EXIT_SUCCESS;
 }
 
@@ -112,23 +119,17 @@ void voxey::core::Application::frameBufferCallback(GLFWwindow* window, int width
 void voxey::core::Application::setupDefaultKeybinds()
 {
 	voxey::input::Input::registerAction("ESC", GLFW_KEY_ESCAPE);
-	voxey::input::Input::registerAction("T", GLFW_KEY_T);
+	voxey::input::Input::registerAction("W", GLFW_KEY_W);
+	voxey::input::Input::registerAction("S", GLFW_KEY_S);
+	voxey::input::Input::registerAction("A", GLFW_KEY_A);
+	voxey::input::Input::registerAction("D", GLFW_KEY_D);
+	voxey::input::Input::registerAction("SPACE", GLFW_KEY_SPACE);
+	voxey::input::Input::registerAction("LEFT_SHIFT", GLFW_KEY_LEFT_SHIFT);
 }
 
 void voxey::core::Application::setupDebugKeybinds()
 {
-}
+	std::cout << "debugMode keybinds" << std::endl;
 
-void voxey::core::Application::changeGLPolygonMode()
-{
-	GLint currentPolygonMode[2];
-	glGetIntegerv(GL_POLYGON_MODE, currentPolygonMode);
-
-	GLenum newMode = (currentPolygonMode[0] == GL_LINES) ? GL_FILL : GL_LINES;
-	glPolygonMode(GL_FRONT_AND_BACK, newMode);
-
-	GLenum error = glGetError();
-	if (error != GL_NO_ERROR) {
-		std::cerr << "OpenGL Error: " << error << std::endl;
-	}
+	voxey::input::Input::registerAction("DEBUG_POLYGON_MODE", GLFW_KEY_T);
 }
